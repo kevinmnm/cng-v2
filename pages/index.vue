@@ -5,5 +5,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+	name: 'HomePage',
+	data() {
+		return {}
+	},
+	mounted() {
+		alert('ss')
+	},
+}
 </script>
