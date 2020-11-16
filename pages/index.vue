@@ -1,17 +1,28 @@
 <template>
-	<v-row justify="center" align="center">
-		<v-col>sdf</v-col>
+	<v-row>
+		<LoginComp v-if="showLoginComp"></LoginComp>
+      <LoggedComp v-else></LoggedComp>
 	</v-row>
 </template>
 
 <script>
+import LoginComp from '@/components/LoginComp.vue';
+import LoggedComp from '@/components/LoggedComp.vue';
+
 export default {
 	name: 'HomePage',
+	components: {
+      LoginComp,
+      LoggedComp
+	},
 	data() {
-		return {}
-	},
-	mounted() {
-		alert('ss')
-	},
+		return {
+         showLoginComp: true
+      }
+	}
 }
 </script>
+
+<style>
+
+</style>
