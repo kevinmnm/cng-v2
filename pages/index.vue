@@ -1,11 +1,12 @@
 <template>
 	<v-row>
-		<LoginComp v-if="showLoginComp"></LoginComp>
-      <LoggedComp v-else></LoggedComp>
+      <LoggedComp v-if="logged"></LoggedComp>
+		<LoginComp v-else></LoginComp>
 	</v-row>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import LoginComp from '@/components/LoginComp.vue';
 import LoggedComp from '@/components/LoggedComp.vue';
 
@@ -19,7 +20,10 @@ export default {
 		return {
          showLoginComp: true
       }
-	}
+   },
+   computed: mapState({
+      logged: state => state.logged.logged
+   })
 }
 </script>
 

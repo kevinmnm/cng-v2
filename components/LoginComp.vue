@@ -13,21 +13,35 @@
 						<v-text-field
 							filled
 							dense
+							outlined
 							label="Username"
 							prepend-icon="mdi-account-circle"
+							v-model="login_username"
+							:error="login_username_error"
+							@change="login_username_error = false"
 						></v-text-field>
 						<v-text-field
 							filled
+							outlined
 							dense
 							label="Password"
 							type="password"
 							prepend-icon="mdi-lock"
+							v-model="login_password"
+							:error="login_password_error"
+							@change="login_password_error = false"
 						></v-text-field>
 					</v-form>
 					<v-checkbox dense label="Remember Username"></v-checkbox>
 				</v-card-text>
 				<v-card-actions>
-					<v-btn color="primary" width="100px">Login</v-btn>
+					<v-btn
+						color="primary"
+						width="100px"
+						@click="loginFunction()"
+						:loading="login_loading"
+						>Login</v-btn
+					>
 				</v-card-actions>
 			</v-card>
 		</v-col>
@@ -65,6 +79,7 @@
 						<v-text-field
 							filled
 							dense
+							outlined
 							label="Continuum Email"
 							type="email"
 							prepend-icon="mdi-email"
@@ -75,6 +90,7 @@
 							<v-col cols="6" class="pa-0 ma-0">
 								<v-text-field
 									filled
+									outlined
 									dense
 									label="First Name"
 									prepend-icon="mdi-account-question"
@@ -86,6 +102,7 @@
 								<v-text-field
 									filled
 									dense
+									outlined
 									label="Last Name"
 									v-model="validator_list[0].signup_last_name.text"
 									:error="validator_list[0].signup_last_name.error"
@@ -95,6 +112,7 @@
 						<v-text-field
 							filled
 							dense
+							outlined
 							label="Username"
 							prepend-icon="mdi-account-circle"
 							v-model="validator_list[0].signup_username.text"
@@ -103,6 +121,7 @@
 						<v-text-field
 							filled
 							dense
+							outlined
 							type="password"
 							label="Password"
 							prepend-icon="mdi-lock"
@@ -111,6 +130,7 @@
 						></v-text-field>
 						<v-text-field
 							filled
+							outlined
 							dense
 							type="password"
 							label="Verify Password"
@@ -128,6 +148,9 @@
 			</v-card>
 		</v-col>
 		<v-dialog v-model="dialog" presistent>
+         <v-btn fab icon absolute small right color="primary" class="ma-3" @click="dialog = false">
+            <v-icon dense>mdi-close-thick</v-icon>
+         </v-btn>
 			<v-card tile>
 				<v-card-title class="headline">Signup Guide</v-card-title>
 				<v-list class="pa-0 ma-0" dense>
@@ -152,85 +175,127 @@
 </template>
 
 <script>
+import openSocket from 'socket.io-client';
+
 export default {
 	name: 'LoginComp',
 	data() {
 		return {
 			show_signup: false,
-         dialog: false,
-         validator_list: [{
-            signup_email: {
-               text: '',
-               error: false
-            },
-            signup_first_name: {
-               text: '',
-               error: false
-            },
-            signup_last_name: {
-               text: '',
-               error: false
-            },
-            signup_username: {
-               text: '',
-               error: false
-            },
-            signup_password: {
-               text: '',
-               error: false
-            },
-            signup_password_verify: {
-               text: '',
-               error: false
-            }
-         }],
-         validator_keys_array: null,
-         validator_values_array: null,
+			dialog: false,
+			login_username: '',
+			login_password: '',
+			login_username_error: false,
+			login_password_error: false,
+			login_loading: false,
+			validator_list: [
+				{
+					signup_email: {
+						text: '',
+						error: false,
+					},
+					signup_first_name: {
+						text: '',
+						error: false,
+					},
+					signup_last_name: {
+						text: '',
+						error: false,
+					},
+					signup_username: {
+						text: '',
+						error: false,
+					},
+					signup_password: {
+						text: '',
+						error: false,
+					},
+					signup_password_verify: {
+						text: '',
+						error: false,
+					},
+				},
+			],
+			validator_keys_array: null,
+			validator_values_array: null,
 			signup_guide: [
 				{
 					title: 'Continuum Email',
 					des: 'Will be used to identify user',
-               example: 'first.last@continuumgbl.com',
-               col: true
+					example: 'first.last@continuumgbl.com',
+					col: true,
 				},
 				{
 					title: 'Name',
 					des: 'Will be auto imported when creating notes',
-               example: 'John Doe',
-               col: false
+					example: 'John Doe',
+					col: false,
 				},
 				{
 					title: 'Username',
 					des: 'Will be a primary login ID',
-               example: 'myid123',
-               col: true
+					example: 'myid123',
+					col: true,
 				},
 				{
 					title: 'Password',
 					des:
 						'Credential that will be encoded securely upon signup. Must be at least 6 characters long.',
-               example: 'hello5',
-               col: false
-				}
-			]
+					example: 'hello5',
+					col: false,
+				},
+			],
 		}
 	},
 	methods: {
+		async loginFunction() {
+			this.login_loading = true
+			if (!this.login_username || !this.login_password) {
+				if (!this.login_username) this.login_username_error = true
+				if (!this.login_password) this.login_password_error = true
+				return (this.login_loading = false)
+				// return alert('err - empthy');
+			}
+
+			let response = await fetch(
+				this.$store.state.store.fetch_url + '/login',
+				{
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+					body: JSON.stringify({
+						login_username: this.login_username,
+						login_password: this.login_password,
+					}),
+				}
+			)
+
+			response.json().then((data) => {
+				if (data.logged) {
+               localStorage.token = 'Bearer ' + data.token
+               openSocket(this.$store.state.store.fetch_url);
+					location.reload() // Consider changeing it to non-reloading method.
+				} else {
+               this.login_loading = false;
+               if (data.msg === 'Invalid Username') this.login_username_error = true;
+               if (data.msg === 'Invalid Password') this.login_password_error = true;
+               alert(data.msg);
+            }
+			})
+		},
 		async showSignup() {
-			await (() => (this.show_signup = true))();
-			this.$vuetify.goTo('#signup');
+			await (() => (this.show_signup = true))()
+			this.$vuetify.goTo('#signup')
 		},
 		async signupFunc() {
-         this.validator_keys_array = Object.keys(this.validator_list[0]);
-         this.validator_values_array = Object.values(this.validator_list[0]);
+			this.validator_keys_array = Object.keys(this.validator_list[0])
+			this.validator_values_array = Object.values(this.validator_list[0])
 
-         for (let i=0; i<this.validator_values_array.length; i++){
-            // console.dir( this.validator_list[0][this.validator_keys_array[i]].error );
-            if ( !this.validator_list[0][this.validator_keys_array[i]].text ) {
-               this.validator_list[0][this.validator_keys_array[i]].error = true;
-            }
-         }
-
+			for (let i = 0; i < this.validator_values_array.length; i++) {
+				// console.dir( this.validator_list[0][this.validator_keys_array[i]].error );
+				if (!this.validator_list[0][this.validator_keys_array[i]].text) {
+					this.validator_list[0][this.validator_keys_array[i]].error = true
+				}
+			}
 
 			let response = await fetch(
 				this.$store.state.store.fetch_url + '/signup',
@@ -244,11 +309,16 @@ export default {
 						username: this.validator_list[0].signup_username.text,
 						password: this.validator_list[0].signup_password.text,
 						password_verify: this.validator_list[0].signup_password_verify.text,
-					}),
+					})
 				}
 			)
 
-			response.json().then((res) => console.log(res))
+			response.json().then((res) => {
+				if (response.status === 200 && res.signedUp) {
+               alert(res.msg);
+					location.reload();
+				}
+			})
 		},
 	},
 }
