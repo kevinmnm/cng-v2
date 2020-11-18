@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
    name: 'DefaultVue',
    data() {
@@ -24,6 +26,9 @@ export default {
          show_content: false
       }
    },
+   // computed: mapState({
+   //    show_content: state => state.logged.logged
+   // }),
 	created() {
 		console.warn(process.env.NODE_ENV)
 

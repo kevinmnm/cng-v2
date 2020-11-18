@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 
 export default {
 	name: 'LoginComp',
@@ -253,8 +253,7 @@ export default {
 			if (!this.login_username || !this.login_password) {
 				if (!this.login_username) this.login_username_error = true
 				if (!this.login_password) this.login_password_error = true
-				return (this.login_loading = false)
-				// return alert('err - empthy');
+				return this.login_loading = false;
 			}
 
 			let response = await fetch(
@@ -271,9 +270,11 @@ export default {
 
 			response.json().then((data) => {
 				if (data.logged) {
+               this.$store.commit('logged/SET_LOGGED', data.logged);
                localStorage.token = 'Bearer ' + data.token
-               openSocket(this.$store.state.store.fetch_url);
-					location.reload() // Consider changeing it to non-reloading method.
+               io(this.$store.state.store.fetch_url);
+               // this.$forceUpdate();
+					// location.reload() // Consider changeing it to non-reloading method.
 				} else {
                this.login_loading = false;
                if (data.msg === 'Invalid Username') this.login_username_error = true;

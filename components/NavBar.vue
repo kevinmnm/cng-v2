@@ -1,7 +1,40 @@
 <template>
-   <v-app-bar absolute dense app>
-      asdf
-   </v-app-bar>
+	<v-app-bar app dense>
+		<v-toolbar-title class="font-weight-bold">
+			<v-tooltip bottom>
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn large to="/" v-bind="attrs" v-on="on">cng</v-btn>
+				</template>
+				<span>HOME</span>
+			</v-tooltip>
+		</v-toolbar-title>
+
+		<v-spacer></v-spacer>
+
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+				<v-badge
+					dot
+					offset-y="15"
+					offset-x="25"
+					class="d-flex justify-center pa-0 ma-0"
+				>
+					<v-btn large v-bind="attrs" v-on="on" text>
+						<v-icon>mdi-bell</v-icon>
+					</v-btn>
+				</v-badge>
+			</template>
+			<span>UPDATES</span>
+		</v-tooltip>
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+				<v-btn large v-bind="attrs" v-on="on" text to="/dashboard">
+					<v-icon>mdi-account-circle</v-icon>
+				</v-btn>
+			</template>
+			<span>DASHBOARD</span>
+		</v-tooltip>
+	</v-app-bar>
 </template>
 
 <script>
