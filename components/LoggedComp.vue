@@ -61,8 +61,8 @@
 			<v-card>
 				<h2 class="text-center">Case Outcome</h2>
 				<v-select
-            outlined
-            solo
+					outlined
+					solo
 					filled
 					:items="[
 						'PA initial',
@@ -85,6 +85,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import io from 'socket.io-client'
 import Navbar from './NavBar.vue'
 import WelcomeCallTemplate from './template/WelcomeCall.vue'
 
@@ -93,10 +95,27 @@ export default {
 	components: {
 		Navbar,
 		WelcomeCallTemplate,
-   }
+	},
+	computed: mapState({
+		fetch_url(state) {
+			return state.store.fetch_url
+		},
+	}),
+	mounted() {
+      this.$store.dispatch('logged/fetchAuth', this.fetch_url)
+         .then( res => {
+            window.socket = io(this.fetch_url);
+            console.warn(window.socket);
+            window.socket.on('customEvent', data => {
+               console.warn(data);
+            });
+         });
+	},
 }
 </script>
 
 <style scoped>
-
+#asdf {
+	color: #131313;
+}
 </style>

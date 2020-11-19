@@ -16,13 +16,8 @@ export default {
       LoginComp,
       LoggedComp
 	},
-	data() {
-		return {
-         showLoginComp: true
-      }
-   },
    computed: mapState({
-      logged: state => state.logged.logged
+      logged: state => state.logged.logged // Initially false in store.
    })
 }
 </script>

@@ -48,7 +48,7 @@ export default {
 	methods: {
 		logout() {
 			localStorage.token = null;
-         this.$store.dispatch('logged/fetchLogged', false);
+         this.$store.commit('logged/SET_LOGGED', false);
          this.dialog = false;
          this.$router.push('/');
 		},

@@ -9,7 +9,22 @@ export const mutations = {
 }
 
 export const actions = {
-   fetchLogged({ commit }, payload) {
-      return commit('SET_LOGGED', payload);
+   async fetchAuth({ commit }, payload) {
+      let respond = await fetch(payload + '/auth', {
+         headers: { Authorization: localStorage.token }
+      });
+
+      let data = await respond.json();
+
+      return new Promise((res, rej) => {
+         console.warn('From logged.js action logged value: ' + data.logged);
+
+         commit('SET_LOGGED', data.logged);
+         console.warn('timeout starting!');
+         setTimeout(()=> {
+
+         res();
+         },1000);
+      });
    }
 }

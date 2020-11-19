@@ -46,11 +46,12 @@ export default {
 			.then((res) => res.json())
 			.then((data) => {
 				console.warn(data);
-            this.$store.dispatch('logged/fetchLogged', data.logged);
+            this.$store.commit('logged/SET_LOGGED', data.logged);
             this.show_content = true;
-			})
+         })
 	},
 }
+// Upon mounted, show progress circle -> fetch auth to server to determine logged state -> wait for any response comes from server -> once server responses, commit (sync) to set 'logged' store state -> show content.
 </script>
 
 <style scoped>

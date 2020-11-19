@@ -1,12 +1,19 @@
 <template>
 	<v-col cols="6" class="ma-auto">
-		<h1>Welcome Call</h1>
+		<h1 @click="test()">Welcome Call</h1>
 	</v-col>
 </template>
 
 <script>
 export default {
-	name: 'WelcomeCall',
+   name: 'WelcomeCall',
+   methods: {
+      test() {
+         window.socket.emit('customEvent2', {
+            some: 'data'
+         });
+      }
+   }
 }
 </script>
 
