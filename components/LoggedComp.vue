@@ -19,6 +19,8 @@
 						autocomplete="off"
 						outlined
 						dense
+						v-model="drugName"
+                  @change="$store.commit('info/SET_DRUGNAME', drugName)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -28,6 +30,8 @@
 						autocomplete="off"
 						outlined
 						dense
+						v-model="strength"
+                  @change="$store.commit('info/SET_STRENGTH', strength)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -37,6 +41,8 @@
 						autocomplete="off"
 						outlined
 						dense
+						v-model="quantity"
+                  @change="$store.commit('info/SET_QUANTITY', quantity)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -46,6 +52,8 @@
 						autocomplete="off"
 						outlined
 						dense
+						v-model="dos"
+                  @change="$store.commit('info/SET_DOS', dos)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -55,6 +63,8 @@
 						autocomplete="off"
 						outlined
 						dense
+						v-model="ndc"
+                  @change="$store.commit('info/SET_NDC', ndc)"
 					></v-text-field>
 				</v-card>
 			</v-card>
@@ -78,8 +88,9 @@
 				></v-select>
 			</v-card>
 		</v-sheet>
-		<v-sheet class="d-flex justify-center flex-column" color="primary">
+		<v-sheet class="d-flex justify-center flex-column">
 			<WelcomeCallTemplate />
+         <PrescriptionTemplate />
 		</v-sheet>
 	</v-col>
 </template>
@@ -89,12 +100,23 @@ import { mapState } from 'vuex'
 import io from 'socket.io-client'
 import Navbar from './NavBar.vue'
 import WelcomeCallTemplate from './template/WelcomeCall.vue'
+import PrescriptionTemplate from './template/Prescription.vue'
 
 export default {
 	name: 'LoggedComp',
 	components: {
 		Navbar,
-		WelcomeCallTemplate,
+      WelcomeCallTemplate,
+      PrescriptionTemplate
+	},
+	data() {
+		return {
+			drugName: '',
+			ndc: '',
+			strength: '',
+			dos: '',
+			quantity: '',
+		}
 	},
 	computed: mapState({
 		fetch_url(state) {
@@ -102,20 +124,15 @@ export default {
 		},
 	}),
 	mounted() {
-      this.$store.dispatch('logged/fetchAuth', this.fetch_url)
-         .then( res => {
-            window.socket = io(this.fetch_url);
-            console.warn(window.socket);
-            window.socket.on('customEvent', data => {
-               console.warn(data);
-            });
-         });
+		this.$store.dispatch('logged/fetchAuth', this.fetch_url).then((res) => {
+			window.socket = io(this.fetch_url, {
+				query: 'sss',
+			})
+			console.warn(window.socket)
+			window.socket.on('customEvent', (data) => {
+				console.warn(data)
+			})
+		})
 	},
 }
 </script>
-
-<style scoped>
-#asdf {
-	color: #131313;
-}
-</style>

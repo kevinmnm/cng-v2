@@ -254,7 +254,9 @@ export default {
 				if (!this.login_username) this.login_username_error = true
 				if (!this.login_password) this.login_password_error = true
 				return this.login_loading = false;
-			}
+         }
+         
+         let lastLogin = new Date().toLocaleString('en-US');
 
 			let response = await fetch(
 				this.$store.state.store.fetch_url + '/login',
@@ -263,7 +265,7 @@ export default {
 					method: 'POST',
 					body: JSON.stringify({
 						login_username: this.login_username,
-						login_password: this.login_password,
+                  login_password: this.login_password
 					}),
 				}
 			)
@@ -271,10 +273,14 @@ export default {
 			response.json().then((data) => {
 				if (data.logged) {
                this.$store.commit('logged/SET_LOGGED', data.logged);
-               localStorage.token = 'Bearer ' + data.token
-               io(this.$store.state.store.fetch_url);
-               // this.$forceUpdate();
-					// location.reload() // Consider changeing it to non-reloading method.
+               localStorage.token = 'Bearer ' + data.token;
+               const { firstName, lastName, username, email, _id } = data;
+               localStorage.firstName = firstName[0].toUpperCase() + firstName.substring(1).toLowerCase();
+               localStorage.lastName = lastName[0].toUpperCase() + lastName.substring(1).toLowerCase()
+               localStorage.username = username;
+               localStorage.email = email;
+               localStorage._id = _id;
+
 				} else {
                this.login_loading = false;
                if (data.msg === 'Invalid Username') this.login_username_error = true;

@@ -42,6 +42,15 @@ export default {
       theme: {
          dark: false,
          themes: {
+            light: {
+               inputBg: 'white',
+               // inputLabel: '#063f06',
+               inputLabel: 'black',
+               welcomeCallBg: '#d5ffd5',
+               welcomeCallHi: '#90ee90',
+               prescriptionBg: '#ffdbdb',
+               prescriptionHi: '#f39a9a'
+            },
             dark: {
                primary: colors.blue.darken2,
                accent: colors.grey.darken3,
@@ -50,6 +59,13 @@ export default {
                warning: colors.amber.base,
                error: colors.deepOrange.accent4,
                success: colors.green.accent3,
+               
+               inputBg: '#404040',
+               inputLabel: 'white',
+               welcomeCallBg: '#489b48',
+               welcomeCallHi: '#176217',
+               prescriptionBg: '#9e4b4b',
+               prescriptionHi: '#5a1515'
             },
          },
       },

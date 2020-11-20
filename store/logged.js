@@ -21,10 +21,9 @@ export const actions = {
 
          commit('SET_LOGGED', data.logged);
          console.warn('timeout starting!');
-         setTimeout(()=> {
-
-         res();
-         },1000);
+         setTimeout(() => {
+            res();
+         }, 1000);
       });
    }
 }
