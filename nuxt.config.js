@@ -43,13 +43,23 @@ export default {
          dark: false,
          themes: {
             light: {
-               inputBg: 'white',
+               inputBg: '#FFFFFF',
                // inputLabel: '#063f06',
                inputLabel: 'black',
                welcomeCallBg: '#d5ffd5',
                welcomeCallHi: '#90ee90',
                prescriptionBg: '#ffdbdb',
-               prescriptionHi: '#f39a9a'
+               prescriptionHi: '#f39a9a',
+               priorAuthBg: '#e3e3ff',
+               priorAuthHi: '#add8e6',
+               cpaBg: '#fdcdb9',
+               cpaHi: '#ffa07a',
+               copayQuoteHi: '#d3d3d3',
+               copayQuoteBg: '#eeeded',
+               denialBg: '#fdd1fd',
+               denialHi: '#e290e2',
+               triageBg: '#ffffaa',
+               triageHi: '#ffff65'               
             },
             dark: {
                primary: colors.blue.darken2,
@@ -65,7 +75,17 @@ export default {
                welcomeCallBg: '#489b48',
                welcomeCallHi: '#176217',
                prescriptionBg: '#9e4b4b',
-               prescriptionHi: '#5a1515'
+               prescriptionHi: '#5a1515',
+               priorAuthBg: '#4f4fa0',
+               priorAuthHi: '#17175a',
+               cpaBg: '#ad7058',
+               cpaHi: '#582814',
+               copayQuoteBg: '#9c9c9c',
+               copayQuoteHi: '#585858',
+               denialBg: '#8a4a8a',
+               denialHi: '#501350',
+               triageBg: '#909030',
+               triageHi: '#36360a'
             },
          },
       },

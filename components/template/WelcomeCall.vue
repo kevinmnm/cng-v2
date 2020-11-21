@@ -136,6 +136,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
 	name: 'WelcomeCall',
 	data() {
@@ -150,18 +152,19 @@ export default {
 			addtional_comment: '',
          welcome_call_result: '',
          additional_comment_welcome: '',
-			template_input_style: {
-				'font-size': '20px',
-				'font-weight': 'bold',
-				'border-radius': '0',
-			},
+			// template_input_style: {
+			// 	'font-weight': 'bold',
+			// 	'border-radius': '0',
+			// },
 		}
 	},
-	computed: {
-		inputLabel() {
-			return this.$vuetify.theme.dark ? 'white' : '#063f06'
-		},
-	},
+	computed: mapState({
+         template_input_style: state => state.info.template_input_style,
+      }),
+      inputLabel() {
+			return this.$vuetify.theme.dark ? '#FFFFFF' : '#063f06'
+      },
+      
 	methods: {
 		welcome_result() {
 			this.welcome_call_result = (`

@@ -132,6 +132,103 @@
 				background-color="inputBg"
 				color="inputLabel"
 			></v-select>
+<!-- paid -->
+         <v-text-field
+				label="Total Cost"
+            v-show="show_paid"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="total_cost"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+         <v-text-field
+				label="Amount of Copay"
+            v-show="show_paid"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="amount_of_copay"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+         <v-select
+				label="Was PA Required"
+				:items="['Yes', 'No']"
+            v-show="show_paid"
+				dense
+				filled
+				outlined
+				hide-details
+				class="mb-2"
+				v-model="was_pa_required"
+				:style="template_input_style"
+				background-color="inputBg"
+				color="inputLabel"
+			></v-select>
+<!-- rejected -->
+         <v-select
+				label="Rejected"
+				:items="['For PA', 'For Other']"
+            v-show="paid_rejected === 'Rejected'"
+				dense
+				filled
+				outlined
+				hide-details
+				class="mb-2"
+				v-model="rejected_for"
+				:style="template_input_style"
+				background-color="inputBg"
+				color="inputLabel"
+			></v-select>
+         <v-text-field
+				label="How PA was Initiated"
+            v-show="paid_rejected === 'Rejected' && rejected_for === 'For PA'"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="how_pa_was_initiated"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+         <v-text-field
+				label="CoverMyMeds Key#"
+            v-show="paid_rejected === 'Rejected' && rejected_for === 'For PA'"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="covermymedsKey"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+         <v-text-field
+				label="Reject Reason"
+            v-show="paid_rejected === 'Rejected' && rejected_for === 'For Other'"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="reject_reason"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+
+<!-- patient updated -->
 			<v-select
 				label="Patient Updated"
 				:items="['Yes', 'No']"
@@ -145,7 +242,34 @@
 				background-color="inputBg"
 				color="inputLabel"
 			></v-select>
-			<v-textarea
+         <v-text-field
+				label="Spoke to/Via"
+            v-show="patient_updated === 'Yes'"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="spoke_to"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+         <v-text-field
+				label="At"
+            v-show="patient_updated === 'Yes'"
+				dense
+				filled
+				outlined
+				hide-details
+				v-model="at"
+				class="mb-2"
+				background-color="inputBg"
+				color="inputLabel"
+				:style="template_input_style"
+			></v-text-field>
+
+			<!-- <v-textarea
 				outlined
 				hide-details
 				label="Additional Comment"
@@ -156,7 +280,7 @@
 				:style="template_input_style"
 				background-color="inputBg"
 				color="inputLabel"
-			></v-textarea>
+			></v-textarea> -->
 			<v-btn
 				width="100%"
 				height="50px"
@@ -202,8 +326,18 @@ export default {
 			offset_program: '',
 			paid_rejected: '',
 			patient_updated: '',
-         additional_comment_prescription: '',
-         prescription_result: ''
+         // additional_comment_prescription: '',
+         prescription_result: '',
+         total_cost: '',
+         amount_of_copay: '',
+         was_pa_required: '',
+         rejected_for: '',
+         how_pa_was_initiated: '',
+         covermymedsKey: '',
+         reject_reason: '',
+         spoke_to: '',
+         at: '',
+         show_paid: false
 		}
 	},
 	computed: mapState({
@@ -211,11 +345,51 @@ export default {
 	}),
 	methods: {
 		prescription_temp_result() {
-         this.prescription_result = `
-            Caremark RX verification Template: 
-         `;
+         this.prescription_result = (`
+            Caremark RX verification Template: Verifying for Therapy: | ICD10: ${this.icd_10} | Has digital messaging offered to the patient: N/A | Is this plan part of the specialty Manufacturer Copay Card Offset Program: ${this.offset_program_outcome()} | Client Name: ${this.client_name} | Bill Code: ${this.bill_code} | Policy Number: ${this.policy_number} | Person Code: N/A | Group Number: ${this.group_number} | BIN: ${this.bin_number} | PCN: ${this.pcn_number} | Secondary Insurance?: N/A | Ran Claim: HBS | NDC: ${this.$store.state.info.ndc} | Strength: ${this.$store.state.info.strength} | QTY: ${this.$store.state.info.quantity} | Day Supply: ${this.$store.state.info.dos} | Paid/Rejected: ${this.paid_rejected_outcome()} | Patient Updated: ${this.patient_updated_outcome()} | Notified HUB: N/A | Additional Information: | Note Entered By: ${localStorage.firstName} ${localStorage.lastName}
+         `).trim();
       },
-	},
+      offset_program_outcome(){
+         if (this.offset_program === 'Yes') {
+            return `Yes - (If a Manufacturer copay card is being applied to the patient's claim, only what the member truly pays will go towards their deductible and OOP accumulator (not what is paid by copay assistance program))`;
+         } else if (this.offset_program === 'No') {
+            return `No`;
+         } else if (this.offset_program === 'N/A'){
+            return `N/A`;
+         } else {
+            alert('something went wrong for offset_program');
+         }
+      },
+      patient_updated_outcome(){
+         if (this.patient_updated === 'Yes') {
+            return `Yes | Spoke to/Via: ${this.spoke_to} | At: ${this.at}`;
+         } else if (this.patient_updated === 'No') {
+            return `No`;
+         } else {
+            alert('something went wrong for patient_updated');
+         }
+      },
+      paid_rejected_outcome() {
+         if (this.paid_rejected === 'Paid') {
+            return `Paid | Dispensed From: ${this.dispense_from} | Paid: ${this.total_cost} | Amount attributed to the Deductible: N/A | Amount of Copay: ${this.amount_of_copay} | Amount of Coinsurance: N/A | PA Required: ${this.was_pa_required} | MDO Updated: No`;
+
+         } else if (this.paid_rejected === 'Rejected') {
+            if (this.rejected_for === 'For PA') {
+               return `Rejected | Rejected For: PA | How PA was initiated: ${this.how_pa_was_initiated} | CoverMyMeds Key#: ${this.covermymedsKey} | MDO Updated: No`;
+            } else if (this.rejected_for === 'For Other') {
+               return `Rejected | Rejected For: Other | Reject Other Reason: ${this.reject_reason} | MDO Updated: No`;
+            }
+         }
+      }
+   },
+   watch: {
+      paid_rejected(newVal, oldVal){
+         (newVal === 'Paid') ? 
+            this.show_paid = true :
+            this.show_paid = false;
+
+      }
+   }
 }
 </script>
 

@@ -20,7 +20,7 @@
 						outlined
 						dense
 						v-model="drugName"
-                  @change="$store.commit('info/SET_DRUGNAME', drugName)"
+						@change="$store.commit('info/SET_DRUGNAME', drugName)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -31,7 +31,7 @@
 						outlined
 						dense
 						v-model="strength"
-                  @change="$store.commit('info/SET_STRENGTH', strength)"
+						@change="$store.commit('info/SET_STRENGTH', strength)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -42,7 +42,7 @@
 						outlined
 						dense
 						v-model="quantity"
-                  @change="$store.commit('info/SET_QUANTITY', quantity)"
+						@change="$store.commit('info/SET_QUANTITY', quantity)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -53,7 +53,7 @@
 						outlined
 						dense
 						v-model="dos"
-                  @change="$store.commit('info/SET_DOS', dos)"
+						@change="$store.commit('info/SET_DOS', dos)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -64,7 +64,7 @@
 						outlined
 						dense
 						v-model="ndc"
-                  @change="$store.commit('info/SET_NDC', ndc)"
+						@change="$store.commit('info/SET_NDC', ndc)"
 					></v-text-field>
 				</v-card>
 			</v-card>
@@ -90,7 +90,12 @@
 		</v-sheet>
 		<v-sheet class="d-flex justify-center flex-column">
 			<WelcomeCallTemplate />
-         <PrescriptionTemplate />
+			<PrescriptionTemplate />
+			<PriorAuthTemplate />
+			<CPATemplate />
+			<CopayQuoteTemplate />
+			<DenialTemplate />
+			<TriageTemplate />
 		</v-sheet>
 	</v-col>
 </template>
@@ -101,13 +106,23 @@ import io from 'socket.io-client'
 import Navbar from './NavBar.vue'
 import WelcomeCallTemplate from './template/WelcomeCall.vue'
 import PrescriptionTemplate from './template/Prescription.vue'
+import PriorAuthTemplate from './template/PriorAuth.vue'
+import CPATemplate from './template/CPA.vue'
+import CopayQuoteTemplate from './template/CopayQuote.vue'
+import DenialTemplate from './template/DenialTemplate.vue'
+import TriageTemplate from './template/TriageTemplate.vue'
 
 export default {
 	name: 'LoggedComp',
 	components: {
 		Navbar,
-      WelcomeCallTemplate,
-      PrescriptionTemplate
+		WelcomeCallTemplate,
+		PrescriptionTemplate,
+		PriorAuthTemplate,
+		CPATemplate,
+		CopayQuoteTemplate,
+		DenialTemplate,
+		TriageTemplate,
 	},
 	data() {
 		return {
