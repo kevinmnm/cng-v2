@@ -20,6 +20,7 @@
 				class="mb-2 mt-2"
 				v-model="was_cpa_offered"
 				:style="template_input_style"
+            :error="cpa_error"
 				background-color="inputBg"
 				color="inputLabel"
 			></v-select>
@@ -31,6 +32,7 @@
 				outlined
 				hide-details
 				v-model="how_many_attempts"
+            :error="how_many_attempts_error"
 				class="mb-2"
 				background-color="inputBg"
 				color="inputLabel"
@@ -83,8 +85,11 @@ export default {
 	name: 'CopayAssistance',
 	data() {
 		return {
+         cpa_error: false,
 			was_cpa_offered: '',
-			how_many_attempts: '',
+         how_many_attempts: '',
+         how_many_attempts_error: false,
+         cpa_outcome: ''
 		}
 	},
 	methods: {
@@ -92,7 +97,15 @@ export default {
 			window.open(
 				'https://pronet.cvshealth.com/Gen2/Shared_Web_Apps/BV_Note_Creator_Copay_Template_V3.aspx'
 			)
-		},
+      },
+      cpa_result() {
+         if (!this.was_cpa_offered) return this.cpa_error = true; 
+         // else if (this.was_cpa_offered && !this.how_many_attempts) return (this.cpa_error = false this.how_many_attempts_error = true );
+         else this.cpa_error = false; 
+         this.cpa_outcome = (`
+            Copay Assistance Verification for: Drug | Has digital messaging offered to the patient: N/A | Drug Name/Strength: ${this.$store.state.info.drugName} / ${this.$store.state.info.strength} | Note Entered By: ${localStorage.firstName} | Phone Ext: 866-249-1556/1037646 | Was BV Team Copay Assistance offering to patient successful: No | MAXIMUM NUMBER OF ATTEMPTS MADE BY BV TEAM TO OFFER COPAY ASSISTANCE WITH NO PATIENT RESPONSE.  PHARMACY NEEDS TO OFFER COPAY ASSIST AT THE POINT OF SCHEDULING. Number of Attempts made: ${this.how_many_attempts} ---- If a Manufacturer Copay Card is being applied to the patient's claim and the BV notes or Payer files indicate the client/insurance plan is participating in the Specialty Manufacturer Copay Card Offset program, review the following: 1)Only what the member truly pays will go towards their deductible and OOP accumulator (not what is paid by copay assistance program)2)Ask the patient when they would like to apply their Manufacturer Copay Card and notate the system 3)Advise the patient to contact CVS Specialty if they change their mind as to when they want their copay assistance to be applied.
+         `).trim();
+      }
 	},
 	computed: mapState({
 		template_input_style: (state) => state.info.template_input_style,

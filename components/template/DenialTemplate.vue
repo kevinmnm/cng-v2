@@ -1,7 +1,7 @@
 <template>
 	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
 		<v-form
-			style="border: 2px solid blue;"
+			style="border: 2px solid blue"
 			class="d-flex flex-column flex-start pa-0 denialBg"
 			autocomplete="off"
 			aria-autocomplete="off"
@@ -103,7 +103,6 @@
 				color="inputLabel"
 				v-model="denial_outcome"
 			></v-textarea>
-
 		</v-form>
 	</v-col>
 </template>
@@ -116,8 +115,21 @@ export default {
 	data() {
 		return {
 			denial_outcome: '',
+			denial_at_phone: '',
+			denial_spoke_to: '',
+			denial_via: '',
+			denial_at: '',
+			conversation_voicemail_details: '',
+			denial_reason: '',
 		}
-	},
+   },
+   methods: {
+      denial_result() {
+         this.denial_outcome = (`
+            Denial/Triage BV Verification Details: Verifying: ${this.$store.state.info.drugName} | Template Type: Denial | Final Follow-up With Patient: Yes | At phone#: ${this.denial_at_phone} | Spoke to: ${this.denial_spoke_to} | Conversation/VM Detailed: ${this.conversation_voicemail_details} | Final Disposition sent to: MDO | Via: ${this.denial_via} | AT: ${this.denial_at} | Notified HUB (if ref source): N/A | Via: N/A | AT: N/A | Out of Network: No | If OON triage, explained that: N/A Is their network provider. Do they want their information sent to network provider?: N/A | Faxed pt. info to: N/A | At Fax#: N/A | Competitor Phone: N/A | Denial/Triage Reason: ${this.denial_reason} | Note entered by: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Ext: 866-249-1556/1037646 | Additional Comments: 
+         `).trim();
+      }
+   },
 	computed: mapState({
 		template_input_style: (state) => state.info.template_input_style,
 	}),

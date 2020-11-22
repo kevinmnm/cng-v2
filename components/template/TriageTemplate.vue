@@ -69,6 +69,7 @@
 
          <v-text-field
 				label="To which Pharmacy?"
+            v-show="this.which_triage === 'External'"
 				dense
 				filled
 				outlined
@@ -81,6 +82,7 @@
 			></v-text-field>
          <v-text-field
 				label="Competitor Fax#"
+            v-show="this.which_triage === 'External'"
 				dense
 				filled
 				outlined
@@ -93,6 +95,7 @@
 			></v-text-field>
          <v-text-field
 				label="Competitor Phone#"
+            v-show="this.which_triage === 'External'"
 				dense
 				filled
 				outlined
@@ -104,12 +107,17 @@
 				:style="template_input_style"
 			></v-text-field>
 
-         <v-card flat class="triageHi">
+         <v-card 
+            flat 
+            class="triageHi" 
+            v-show="this.which_triage === 'External'"
+         >
 				<h3 class="text-center">Final disposition sent to MDO</h3>
 			</v-card>
 
          <v-select
 				label="Via"
+            v-show="this.which_triage === 'External'"
             :items="['Phone', 'Fax', 'Letter', 'N/A']"
 				dense
 				filled
@@ -123,6 +131,7 @@
 			></v-select>
          <v-text-field
 				label="At"
+            v-show="this.which_triage === 'External'"
 				dense
 				filled
 				outlined
@@ -149,11 +158,11 @@
 			<v-textarea
 				outlined
 				hide-details
-				label="Denial Reason"
+				label="Triage Reason"
 				height="70px"
 				class="mb-0"
 				no-resize
-				v-model="denial_reason"
+				v-model="triage_reason"
 				:style="template_input_style"
 				background-color="inputBg"
 				color="inputLabel"
@@ -166,7 +175,7 @@
 				depressed
 				outlined
 				:style="template_input_style"
-				@click="triage_reason()"
+				@click="triage_result()"
 				>Generate & Copy</v-btn
 			>
          <v-textarea
@@ -197,8 +206,39 @@ export default {
          triage_at_phone: '',
          triage_spoke_to: '',
          to_which_pharmacy: '',
+         internal_triage_to: '',
          competitor_fax: '',
-         competitor_phone: ''
+         competitor_phone: '',
+         conversation_voicemail_details: '',
+         triage_reason: '',
+         triage_outcome: ''
+      }
+   },
+   methods: {
+      triage_result(){
+         this.triage_outcome = (`
+            Denial/Triage BV Verification Details: Verifying: asdf | Template Type: Triage | Internal Triage to: ${this.internalTriageTo()} | AT: N/A | Final Follow-up With Patient of Triage: Yes | At phone#: ${this.triage_at_phone} | Spoke to: ${this.triage_spoke_to} | Conversation/VM Detailed: ${this.conversation_voicemail_details} | Final Disposition sent to: ${this.finalDispositionSentTo()}
+         `).trim();
+      },
+      internalTriageTo(){
+         if (this.which_triage === 'Internal') {
+            return this.internal_triage_to;
+         } else if (this.which_triage === 'External') {
+            return 'N/A';
+         } else {
+            return alert('Something wrong1');
+         }
+      },
+      finalDispositionSentTo() {
+         if (this.which_triage === 'Internal') {
+            return (`
+               N/A | Via: N/A | AT: n/a | Notified HUB (if ref source): N/A | Via: N/A | AT: N/A | Out of Network: No | If OON triage, explained that: N/A | Is their network provider. Do they want their information sent to network provider?: N/A | Faxed pt. info to: N/A | At Fax#: N/A | Competitor Phone: N/A | Denial/Triage Reason: ${this.triage_reason} | Note entered by: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Ext: 866-249-1556/1037646 | Additional Comments: 
+            `).trim();
+         } else if (this.which_triage === 'External') {
+            return (`
+               MDO | Via: ${this.triage_via} | At: ${this.triage_at} | Notified HUB (if ref source): N/A | Via: N/A | AT: N/A | Out of Network: Yes | If OON triage, explained that: ${this.to_which_pharmacy} is their network provider. Do they want their information sent to network provider?: Yes | Faxed pt. info to: ${this.to_which_pharmacy} | At Fax#: ${this.competitor_fax} | Competitor Phone: ${this.competitor_phone} | Denial/Triage Reason: ${this.triage_reason} | Note entered by: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Ext: 866-249-1556/1037646 | Additional Comments: 
+            `).trim();
+         }
       }
    },
    computed: mapState({
