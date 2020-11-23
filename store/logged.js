@@ -18,12 +18,8 @@ export const actions = {
 
       return new Promise((res, rej) => {
          console.warn('From logged.js action logged value: ' + data.logged);
-
          commit('SET_LOGGED', data.logged);
-         console.warn('timeout starting!');
-         setTimeout(() => {
-            res();
-         }, 1000);
+         res();
       });
    }
 }

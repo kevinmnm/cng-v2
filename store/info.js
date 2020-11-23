@@ -43,3 +43,9 @@ export const mutations = {
       state.ndc = payload;
    }
 }
+
+// export const actions = {
+//    async fetch_drugname({ commit }, payload) {
+//       commit('SET_DRUGNAME', payload);
+//    }
+// }

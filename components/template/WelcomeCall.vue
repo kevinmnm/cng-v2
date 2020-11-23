@@ -212,7 +212,7 @@ export default {
 			this.welcome_call_result = `
             Welcome Call Details | Drug: ${this.$store.state.info.drugName} | OB Call To: ${this.ob_call_to} | Phone: ${this.phone} | Spoke To: ${this.spoke_to} | Confirmed Patient Info: ${this.confirmed_patient_info} | Confirmed MD: ${this.confirmed_md} | Needs By Date: ${this.needs_by_date} | Offered Digital: ${this.offered_digital} | Note Entered By: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Txt: 866-249-1556/1037646 | Addt'l Comments: ${this.additional_comment_welcome}
          `.trim()
-		},
+      }
 		// test() {
 		//    window.socket.emit('customEvent2', {
 		//       some: 'data'

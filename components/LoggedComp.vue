@@ -3,13 +3,28 @@
 		<Navbar />
 		<v-sheet class="d-flex justify-center flex-row">
 			<v-col cols="6" class="text-center">
-				<v-btn>caremark</v-btn>
+				<v-btn
+					class="prescriptionHi"
+					@click="set_plan_type('caremark')"
+					width="100%"
+               v-show="plan_type_button"
+					>caremark</v-btn
+				>
 			</v-col>
 			<v-col cols="6" class="text-center">
-				<v-btn>non-caremark</v-btn>
+				<v-btn
+					class="nonCaremark"
+					@click="set_plan_type('non-caremark')"
+					width="100%"
+               v-show="plan_type_button"
+					>non-caremark</v-btn
+				>
 			</v-col>
 		</v-sheet>
-		<v-sheet class="mb-4" elevation="2">
+		<v-card outlined class="font-weight-bold text-center mb-6">
+			<h2>{{ plan_type ? plan_type.toUpperCase() : null }}</h2>
+		</v-card>
+		<v-sheet class="mb-4" elevation="2" v-show="plan_type">
 			<h2 class="text-center mb-2">Drug Info</h2>
 			<v-card
 				flat
@@ -18,35 +33,13 @@
 					$vuetify.breakpoint.name === 'xs' ? 'flex-column' : 'flex-row'
 				"
 			>
-				<!-- <v-card flat>
-					<v-menu bottom nudge-bottom internal-activator open-on-focus>
-						<template v-slot:activator="{ on, attrs }">
-							<v-text-field
-								label="Drug Name"
-								color="inputLabel"
-								autocomplete="off"
-								v-bind="attrs"
-								v-on="on"
-								hide-details
-								outlined
-								dense
-								v-model="drugName"
-								@change="$store.commit('info/SET_DRUGNAME', drugName)"
-							></v-text-field>
-						</template>
-						<v-list>
-                     <v-list-item>asdfasdf</v-list-item>
-                     <v-list-item>ssss</v-list-item>
-                  </v-list>
-					</v-menu>
-				</v-card> -->
+				<!-- @change="$store.dispatch('info/fetch_drugname', drugName)" -->
+				<!-- @change="$store.commit('info/SET_DRUGNAME', drugName)" -->
 				<v-card flat>
 					<v-text-field
 						label="Drug Name"
 						color="inputLabel"
 						autocomplete="off"
-						v-bind="attrs"
-						v-on="on"
 						hide-details
 						outlined
 						dense
@@ -106,11 +99,11 @@
 			<v-card class="mt-10">
 				<h2 class="text-center mb-2">Case Outcome</h2>
 				<v-select
-               :menu-props="{ 
-                  top: false, 
-                  offsetY: true,
-                  'allow-overflow': true 
-               }"
+					:menu-props="{
+						top: false,
+						offsetY: true,
+						'allow-overflow': true,
+					}"
 					outlined
 					solo
 					filled
@@ -126,21 +119,32 @@
 						'PA denial template',
 					]"
 					label="Choose"
+					v-model="case_outcome"
 				></v-select>
 			</v-card>
 		</v-sheet>
 		<v-sheet
 			class="d-flex justify-center flex-column"
 			style="background-color: transparent"
+			ref="template_wrapper"
+			v-if="case_outcome"
 		>
-			<WelcomeCallTemplate />
+			<!-- <WelcomeCallTemplate :key="'welcome' + Math.random()" />
+			<PrescriptionTemplate :key="'prescription' + Math.random()" />
+			<PriorAuthTemplate :key="'pa' + Math.random()" />
+			<CPATemplate :key="'cpa' + Math.random()" />
+			<CopayQuoteTemplate :key="'copayquote' + Math.random()" />
+			<DenialTemplate :key="'denial' + Math.random()" />
+			<TriageTemplate :key="'triage' + Math.random()" /> -->
+         <WelcomeCallTemplate />
 			<PrescriptionTemplate />
 			<PriorAuthTemplate />
-			<CPATemplate />
+			<CPATemplate/>
 			<CopayQuoteTemplate />
 			<DenialTemplate />
 			<TriageTemplate />
 		</v-sheet>
+		<v-btn v-show="plan_type" @click="reset_all_templates()">reset</v-btn>
 	</v-col>
 </template>
 
@@ -170,6 +174,9 @@ export default {
 	},
 	data() {
 		return {
+         plan_type: false,
+         plan_type_button: true,
+			case_outcome: '',
 			drugName: '',
 			ndc: '',
 			strength: '',
@@ -180,8 +187,21 @@ export default {
 	computed: mapState({
 		fetch_url(state) {
 			return state.store.fetch_url
-		},
+      }
 	}),
+	methods: {
+		set_plan_type(type) {
+         this.plan_type = type;
+         this.plan_type_button = false;
+		},
+		reset_all_templates() {
+			// this.$refs.template_wrapper.$children[0].$children.reset();
+         // console.dir(this.$refs.template_wrapper.$children[0].$children)
+         // this.$forceUpdate();
+         // this.$store.commit('store/FORCE_UPDATE', Math.random());
+         this.$forceUpdate();
+		},
+	},
 	mounted() {
 		this.$store.dispatch('logged/fetchAuth', this.fetch_url).then((res) => {
 			window.socket = io(this.fetch_url, {

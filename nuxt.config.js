@@ -43,9 +43,10 @@ export default {
          dark: false,
          themes: {
             light: {
+               nonCaremark: '#f0d39e',
                inputBg: '#FFFFFF',
                // inputLabel: '#063f06',
-               inputLabel: 'black',
+               inputLabel: '#000000',
                welcomeCallBg: '#d5ffd5',
                welcomeCallHi: '#90ee90',
                prescriptionBg: '#ffdbdb',
@@ -70,8 +71,9 @@ export default {
                error: colors.deepOrange.accent4,
                success: colors.green.accent3,
                
+               nonCaremark: '#614615',
                inputBg: '#404040',
-               inputLabel: 'white',
+               inputLabel: '#FFFFFF',
                welcomeCallBg: '#489b48',
                welcomeCallHi: '#176217',
                prescriptionBg: '#9e4b4b',
