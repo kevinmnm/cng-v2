@@ -18,6 +18,31 @@ export default {
 	},
    computed: mapState({
       logged: state => state.logged.logged // Initially false in store.
-   })
+   }),
 }
 </script>
+
+<style>
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: black;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  width: 20px;
+}
+
+</style>

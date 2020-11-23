@@ -1,5 +1,5 @@
 export const state = () => ({
-   // fetch_url: ''
+   fetch_url: ''
 })
 
 export const mutations = {

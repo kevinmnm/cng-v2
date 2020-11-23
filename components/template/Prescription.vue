@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
 			style="border: 2px solid red"
 			class="d-flex flex-column flex-start pa-0 prescriptionBg"
@@ -16,19 +16,26 @@
 				outlined
 				hide-details
 				v-model="icd_10"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
 			></v-text-field>
 			<v-select
 				label="Is this plan part of the Specialty Manufacturer Copay Card Offset Program?"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				:items="['Yes', 'No', 'N/A']"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="offset_program"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -41,7 +48,8 @@
 				outlined
 				hide-details
 				v-model="client_name"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -53,7 +61,8 @@
 				outlined
 				hide-details
 				v-model="bill_code"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -65,7 +74,8 @@
 				outlined
 				hide-details
 				v-model="policy_number"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -77,7 +87,8 @@
 				outlined
 				hide-details
 				v-model="group_number"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -89,7 +100,8 @@
 				outlined
 				hide-details
 				v-model="bin_number"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -101,7 +113,8 @@
 				outlined
 				hide-details
 				v-model="pcn_number"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -109,11 +122,17 @@
 			<v-select
 				label="Dispense From"
 				:items="pharmacy_list"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="dispense_from"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -122,11 +141,17 @@
 			<v-select
 				label="Paid/Rejected"
 				:items="['Paid', 'Rejected']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="paid_rejected"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -141,7 +166,8 @@
 				outlined
 				hide-details
 				v-model="total_cost"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -154,7 +180,8 @@
 				outlined
 				hide-details
 				v-model="amount_of_copay"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -162,12 +189,18 @@
          <v-select
 				label="Was PA Required"
 				:items="['Yes', 'No']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
             v-show="show_paid"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="was_pa_required"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -178,11 +211,17 @@
 				label="Rejected"
 				:items="['For PA', 'For Other']"
             v-show="paid_rejected === 'Rejected'"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="rejected_for"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -196,7 +235,8 @@
 				outlined
 				hide-details
 				v-model="how_pa_was_initiated"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -209,7 +249,8 @@
 				outlined
 				hide-details
 				v-model="covermymedsKey"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -222,7 +263,8 @@
 				outlined
 				hide-details
 				v-model="reject_reason"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -231,12 +273,18 @@
 <!-- patient updated -->
 			<v-select
 				label="Patient Updated"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				:items="['Yes', 'No']"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="patient_updated"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -250,7 +298,8 @@
 				outlined
 				hide-details
 				v-model="spoke_to"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -263,7 +312,8 @@
 				outlined
 				hide-details
 				v-model="at"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -341,7 +391,11 @@ export default {
 		}
 	},
 	computed: mapState({
-		template_input_style: (state) => state.info.template_input_style,
+      template_input_style: (state) => state.info.template_input_style,
+      template_style_class: state => state.info.template_style_class,
+      pharmacy_list: state => state.info.pharmacy_list,
+      labelType: state => state.settings.labelType,
+      labelView: state => state.settings.labelView
 	}),
 	methods: {
 		prescription_temp_result() {

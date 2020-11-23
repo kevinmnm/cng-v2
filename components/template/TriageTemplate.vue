@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
 			style="border: 2px solid blue"
 			class="d-flex flex-column flex-start pa-0 triageBg"
@@ -13,6 +13,11 @@
          <v-select
 				label="Triage Type"
 				:items="['Internal', 'External']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
@@ -54,6 +59,11 @@
 				label="Internal Triage to"
             v-show="which_triage === 'Internal'"
 				:items="pharmacy_list"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
@@ -119,6 +129,11 @@
 				label="Via"
             v-show="this.which_triage === 'External'"
             :items="['Phone', 'Fax', 'Letter', 'N/A']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
@@ -243,7 +258,10 @@ export default {
    },
    computed: mapState({
       template_input_style: (state) => state.info.template_input_style,
-      pharmacy_list: state => [...state.info.pharmacy_list, 'N/A']
+      pharmacy_list: state => [...state.info.pharmacy_list, 'N/A'],
+      template_style_class: state => state.info.template_style_class,
+      labelType: state => state.settings.labelType,
+      labelView: state => state.settings.labelView
    })
 }
 </script>

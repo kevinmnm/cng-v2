@@ -26,6 +26,16 @@
 			</template>
 			<span>UPDATES</span>
 		</v-tooltip>
+
+      <v-tooltip bottom>
+         <template v-slot:activator="{ on, attrs }">
+            <v-btn large v-bind="attrs" v-on="on" text @click="triggerDarkMode()">
+               <v-icon>mdi-brightness-6</v-icon>
+            </v-btn>
+         </template>
+         <span>THEME</span>
+      </v-tooltip>
+
 		<v-tooltip bottom>
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn large v-bind="attrs" v-on="on" text to="/dashboard">
@@ -38,8 +48,20 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-	name: 'NavBarComp',
+   name: 'NavBarComp',
+   computed: mapState({
+      labelView: state => state.settings.labelView,
+      labelType: state => state.settings.labelType
+   }),
+   methods: {
+		triggerDarkMode() {
+         this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+         localStorage.darkModeCng = this.$vuetify.theme.dark;
+		},
+   }
 }
 </script>
 

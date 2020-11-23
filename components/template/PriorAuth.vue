@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
 			style="border: 2px solid blue"
 			class="d-flex flex-column flex-start pa-0 priorAuthBg"
@@ -17,7 +17,8 @@
 				outlined
 				hide-details
 				v-model="pa_number"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2 mt-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -29,7 +30,8 @@
 				outlined
 				hide-details
 				v-model="effective_date_from"
-				class="mb-2 mt-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -41,7 +43,8 @@
 				outlined
 				hide-details
 				v-model="effective_date_to"
-				class="mt-2 mb-2 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -49,7 +52,8 @@
          <v-btn
 				width="100%"
 				height="50px"
-				class="ma-0 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				small
 				depressed
 				outlined
@@ -62,7 +66,8 @@
 				hide-details
 				name="input-7-4"
 				height="100px"
-				class="mb-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				no-resize
 				background-color="inputBg"
 				color="inputLabel"
@@ -93,7 +98,10 @@ export default {
       }
    },
    computed: mapState({
-		template_input_style: (state) => state.info.template_input_style,
+      template_input_style: (state) => state.info.template_input_style,
+      template_style_class: state => state.info.template_style_class,
+      labelType: state => state.settings.labelType,
+      labelView: state => state.settings.labelView
 	}),
 }
 </script>

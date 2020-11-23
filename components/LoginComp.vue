@@ -256,8 +256,6 @@ export default {
 				return this.login_loading = false;
          }
          
-         let lastLogin = new Date().toLocaleString('en-US');
-
 			let response = await fetch(
 				this.$store.state.store.fetch_url + '/login',
 				{
@@ -280,6 +278,20 @@ export default {
                localStorage.username = username;
                localStorage.email = email;
                localStorage._id = _id;
+
+               if (localStorage.labelView) {
+                  this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView);
+               } else {
+                  this.$store.commit('settings/LABEL_VIEW_MUTATION', 'Dense');
+                  localStorage.labelView = 'Dense';
+               }
+
+               if (localStorage.labelType) {
+                  this.$store.commit('settings/LABEL_TYPE_MUTATION', localStorage.labelType);
+               } else {
+                  this.$store.commit('settings/LABEL_TYPE_MUTATION', 'Show');
+                  localStorage.labelType = 'Show';
+               }
 
 				} else {
                this.login_loading = false;
@@ -308,7 +320,7 @@ export default {
 				this.$store.state.store.fetch_url + '/signup',
 				{
 					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
+               method: 'POST',
 					body: JSON.stringify({
 						email: this.validator_list[0].signup_email.text,
 						first_name: this.validator_list[0].signup_first_name.text,
@@ -321,6 +333,7 @@ export default {
 			)
 
 			response.json().then((res) => {
+            console.log(res);
 				if (response.status === 200 && res.signedUp) {
                alert(res.msg);
 					location.reload();

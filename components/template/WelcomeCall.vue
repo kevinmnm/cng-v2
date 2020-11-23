@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
 			style="border: 2px solid green"
 			class="d-flex flex-column flex-start pa-0 welcomeCallBg"
@@ -15,9 +15,10 @@
 				filled
 				outlined
 				hide-details
+            :single-line="!labelType"
+				:class="{ 'mb-2 mt-2': !labelView }"
 				v-model="ob_call_to"
-				class="mb-2 mt-2 pa-0"
-            background-color="inputBg"
+				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
 			></v-text-field>
@@ -27,7 +28,8 @@
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="phone"
 				background-color="inputBg"
 				color="inputLabel"
@@ -40,7 +42,8 @@
 				outlined
 				hide-details
 				v-model="spoke_to"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				:style="template_input_style"
 				background-color="inputBg"
 				color="inputLabel"
@@ -48,11 +51,17 @@
 			<v-select
 				label="Confirmed Patient Info"
 				:items="['Yes', 'No']"
+				:menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="confirmed_patient_info"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -60,25 +69,32 @@
 			></v-select>
 			<v-select
 				label="Confirmed MD"
+				:menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				:items="['Yes', 'No']"
 				dense
 				filled
 				outlined
 				hide-details
 				v-model="confirmed_md"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				:style="template_input_style"
 				background-color="inputBg"
 				color="inputLabel"
 			></v-select>
 			<v-text-field
 				label="Needs By Date"
-				type="date"
+				placeholder="mm/dd/yyyy"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="needs_by_date"
 				background-color="inputBg"
 				color="inputLabel"
@@ -86,12 +102,18 @@
 			></v-text-field>
 			<v-select
 				label="Offered Digital"
+				:menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				:items="['Yes', 'No', 'Already Enrolled']"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="offered_digital"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -102,7 +124,8 @@
 				hide-details
 				label="Additional Comment"
 				height="70px"
-				class="mb-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				no-resize
 				v-model="additional_comment_welcome"
 				:style="template_input_style"
@@ -136,7 +159,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
 	name: 'WelcomeCall',
@@ -150,8 +173,8 @@ export default {
 			needs_by_date: '',
 			offered_digital: '',
 			addtional_comment: '',
-         welcome_call_result: '',
-         additional_comment_welcome: '',
+			welcome_call_result: '',
+			additional_comment_welcome: '',
 			// template_input_style: {
 			// 	'font-weight': 'bold',
 			// 	'border-radius': '0',
@@ -159,17 +182,21 @@ export default {
 		}
 	},
 	computed: mapState({
-         template_input_style: state => state.info.template_input_style,
-      }),
-      inputLabel() {
-			return this.$vuetify.theme.dark ? '#FFFFFF' : '#063f06'
-      },
-      
+		template_input_style: (state) => state.info.template_input_style,
+		template_style_class: (state) => state.info.template_style_class,
+		labelView: (state) => state.settings.labelView,
+		labelType: (state) => state.settings.labelType,
+	}),
+	inputLabel() {
+		return this.$vuetify.theme.dark ? '#FFFFFF' : '#063f06'
+		// return this.$vuetify.theme.dark ? '#FFFFFF' : '#000000'
+	},
+
 	methods: {
 		welcome_result() {
-			this.welcome_call_result = (`
+			this.welcome_call_result = `
             Welcome Call Details | Drug: ${this.$store.state.info.drugName} | OB Call To: ${this.ob_call_to} | Phone: ${this.phone} | Spoke To: ${this.spoke_to} | Confirmed Patient Info: ${this.confirmed_patient_info} | Confirmed MD: ${this.confirmed_md} | Needs By Date: ${this.needs_by_date} | Offered Digital: ${this.offered_digital} | Note Entered By: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Txt: 866-249-1556/1037646 | Addt'l Comments: ${this.additional_comment_welcome}
-         `).trim();
+         `.trim()
 		},
 		// test() {
 		//    window.socket.emit('customEvent2', {

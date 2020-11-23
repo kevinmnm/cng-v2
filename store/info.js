@@ -7,7 +7,7 @@ export const state = () => ({
    template_input_style: {
       'font-size': '20px',
       'font-weight': 'bold',
-      'border-radius': '0',
+      'border-radius': '0'
    },
    pharmacy_list: [
       'FAIRFIELD, NJ #01701',
@@ -22,7 +22,8 @@ export const state = () => ({
       'PHILADELPHIA, PA #02553',
       'PHOENIX, AZ #03129',
       'HUSTON, TX #03159'
-   ]
+   ],
+   template_style_class: 'col-sm-10 col-md-8 col-lg-6 col-xl-6 ma-auto'
 })
 
 export const mutations = {

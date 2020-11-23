@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
 			style="border: 2px solid blue"
 			class="d-flex flex-column flex-start pa-0 denialBg"
@@ -16,7 +16,8 @@
 				outlined
 				hide-details
 				v-model="denial_at_phone"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2 mt-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -28,7 +29,8 @@
 				outlined
 				hide-details
 				v-model="denial_spoke_to"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -36,11 +38,17 @@
 			<v-select
 				label="Via"
 				:items="['Phone', 'Fax', 'Letter', 'N/A']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				v-model="denial_via"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -53,7 +61,8 @@
 				outlined
 				hide-details
 				v-model="denial_at"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -63,7 +72,8 @@
 				hide-details
 				label="Conversation/Voicemail Details"
 				height="70px"
-				class="mb-2"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				no-resize
 				v-model="conversation_voicemail_details"
 				:style="template_input_style"
@@ -75,7 +85,7 @@
 				hide-details
 				label="Denial Reason"
 				height="70px"
-				class="mb-0"
+				:single-line="!labelType"
 				no-resize
 				v-model="denial_reason"
 				:style="template_input_style"
@@ -85,7 +95,8 @@
 			<v-btn
 				width="100%"
 				height="50px"
-				class="ma-0 pa-0"
+				:single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				small
 				depressed
 				outlined
@@ -97,7 +108,7 @@
 				outlined
 				hide-details
 				height="100px"
-				class="mb-0"
+								:class="{ 'mb-2': !labelView }"
 				no-resize
 				background-color="inputBg"
 				color="inputLabel"
@@ -131,7 +142,10 @@ export default {
       }
    },
 	computed: mapState({
-		template_input_style: (state) => state.info.template_input_style,
+      template_input_style: (state) => state.info.template_input_style,
+      template_style_class: state => state.info.template_style_class,
+      labelType: state => state.settings.labelType,
+      labelView: state => state.settings.labelView
 	}),
 }
 </script>

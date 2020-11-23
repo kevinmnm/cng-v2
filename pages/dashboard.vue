@@ -1,7 +1,7 @@
 <template>
 	<v-col cols="12">
 		<Navbar />
-		<v-sheet class="d-flex justify-center">
+		<v-sheet class="d-flex justify-center" style="background-color: transparent;">
 			<v-dialog v-model="dialog" persistent max-width="290">
 				<template v-slot:activator="{ on, attrs }">
 					<v-btn
@@ -63,7 +63,16 @@ export default {
 			this.$router.push('/')
 			window.socket.disconnect()
 		},
-	},
+   },
+   mounted(){
+      if (localStorage.darkModeCng) {
+			if (localStorage.darkModeCng === 'true') {
+				this.$vuetify.theme.dark = true
+			} else {
+				this.$vuetify.theme.dark = false
+			}
+		}
+   }
 }
 </script>
 

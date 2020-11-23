@@ -1,12 +1,12 @@
 <template>
-	<v-col cols="12" class="col-sm-10 col-md-8 ma-auto">
+	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid blue"
+         style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 copayQuoteBg"
 			autocomplete="off"
 			aria-autocomplete="off"
 		>
-			<v-card flat class="copayQuoteHi">
+			<v-card flat tile class="copayQuoteHi">
 				<h3 class="text-center">Copay Quote</h3>
 			</v-card>
 
@@ -14,36 +14,44 @@
 				label="Total AWP"
 				dense
 				filled
-				outlined
 				hide-details
+            outlined
 				v-model="total_awp"
-				class="mb-2 mt-2"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
+            :single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 			></v-text-field>
          <v-text-field
 				label="Activated to pharmacy location"
 				dense
 				filled
-				outlined
 				hide-details
+            outlined
 				v-model="activated_pharmacy"
-				class="mb-2 mt-2"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
+            :single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 			></v-text-field>
          <v-select
 				label="Insurance participting in the Specialty Manufacturer Copay Card Offset Program?"
 				:items="['Yes', 'No', 'N/A']"
+            :menu-props="{
+					top: false,
+					offsetY: true,
+					'allow-overflow': true,
+				}"
 				dense
 				filled
 				outlined
 				hide-details
-				class="mb-2 mt-2"
 				v-model="insurance_participating"
 				:style="template_input_style"
+            :single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 			></v-select>
@@ -55,13 +63,15 @@
 				depressed
 				outlined
 				:style="template_input_style"
+            :single-line="!labelType"
+				:class="{ 'mb-2': !labelView }"
 				@click="copay_quote_result()"
 				>Generate & Copy</v-btn
 			>
          <v-textarea
-				v-show="was_cpa_offered !== 'Yes'"
 				outlined
 				hide-details
+            solo
 				height="100px"
 				class="mb-0"
 				no-resize
@@ -94,7 +104,10 @@ export default {
       }
    },
 	computed: mapState({
-		template_input_style: (state) => state.info.template_input_style,
+      template_input_style: (state) => state.info.template_input_style,
+      template_style_class: state => state.info.template_style_class,
+      labelType: state => state.settings.labelType,
+      labelView: state => state.settings.labelView
 	}),
 }
 </script>
