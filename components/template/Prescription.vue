@@ -5,6 +5,7 @@
 			class="d-flex flex-column flex-start pa-0 prescriptionBg"
 			autocomplete="off"
 			aria-autocomplete="off"
+         ref="prescription_form"
 		>
 			<v-card flat class="prescriptionHi">
 				<h3 class="text-center">Prescription</h3>
@@ -17,6 +18,7 @@
 				hide-details
 				v-model="icd_10"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2 mt-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -36,6 +38,7 @@
 				hide-details
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="offset_program"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -49,6 +52,7 @@
 				hide-details
 				v-model="client_name"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -62,6 +66,7 @@
 				hide-details
 				v-model="bill_code"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -75,6 +80,7 @@
 				hide-details
 				v-model="policy_number"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -88,6 +94,7 @@
 				hide-details
 				v-model="group_number"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -101,6 +108,7 @@
 				hide-details
 				v-model="bin_number"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -114,6 +122,7 @@
 				hide-details
 				v-model="pcn_number"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
@@ -132,6 +141,7 @@
 				outlined
 				hide-details
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				v-model="dispense_from"
 				:style="template_input_style"
@@ -151,6 +161,7 @@
 				outlined
 				hide-details
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				v-model="paid_rejected"
 				:style="template_input_style"
@@ -285,6 +296,7 @@
 				hide-details
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="patient_updated"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -398,6 +410,12 @@ export default {
 	}),
 	methods: {
 		prescription_temp_result() {
+         this.$refs.prescription_form.validate();
+         if ( Object.keys(this.$refs.prescription_form.errorBag).includes(true) ) {
+            return this.$vuetify.goTo(this.$refs.prescription_form);
+         }
+
+
          this.prescription_result = (`
             Caremark RX verification Template: Verifying for Therapy: | ICD10: ${this.icd_10} | Has digital messaging offered to the patient: N/A | Is this plan part of the specialty Manufacturer Copay Card Offset Program: ${this.offset_program_outcome()} | Client Name: ${this.client_name} | Bill Code: ${this.bill_code} | Policy Number: ${this.policy_number} | Person Code: N/A | Group Number: ${this.group_number} | BIN: ${this.bin_number} | PCN: ${this.pcn_number} | Secondary Insurance?: N/A | Ran Claim: HBS | NDC: ${this.$store.state.info.ndc} | Strength: ${this.$store.state.info.strength} | QTY: ${this.$store.state.info.quantity} | Day Supply: ${this.$store.state.info.dos} | Paid/Rejected: ${this.paid_rejected_outcome()} | Patient Updated: ${this.patient_updated_outcome()} | Notified HUB: N/A | Additional Information: | Note Entered By: ${localStorage.firstName} ${localStorage.lastName}
          `).trim();
@@ -409,8 +427,6 @@ export default {
             return `No`;
          } else if (this.offset_program === 'N/A'){
             return `N/A`;
-         } else {
-            alert('something went wrong for offset_program');
          }
       },
       patient_updated_outcome(){
@@ -418,8 +434,6 @@ export default {
             return `Yes | Spoke to/Via: ${this.spoke_to} | At: ${this.at}`;
          } else if (this.patient_updated === 'No') {
             return `No`;
-         } else {
-            alert('something went wrong for patient_updated');
          }
       },
       paid_rejected_outcome() {

@@ -1,9 +1,12 @@
 <template>
 	<v-app-bar app dense>
-		<v-toolbar-title class="font-weight-bold">
+		<v-toolbar-title class="font-weight-bold" style="height: 100%;">
 			<v-tooltip bottom>
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn large to="/" v-bind="attrs" v-on="on">cng</v-btn>
+					<v-btn large to="/" v-bind="attrs" v-on="on" :ripple="false" tile text height="100%">
+                  <h2 class="hidden-md-and-down">cng</h2>
+                  <v-icon class="hidden-lg-and-up">mdi-home</v-icon>
+               </v-btn>
 				</template>
 				<span>HOME</span>
 			</v-tooltip>
@@ -27,14 +30,20 @@
 			<span>UPDATES</span>
 		</v-tooltip>
 
-      <v-tooltip bottom>
-         <template v-slot:activator="{ on, attrs }">
-            <v-btn large v-bind="attrs" v-on="on" text @click="triggerDarkMode()">
-               <v-icon>mdi-brightness-6</v-icon>
-            </v-btn>
-         </template>
-         <span>THEME</span>
-      </v-tooltip>
+		<v-tooltip bottom>
+			<template v-slot:activator="{ on, attrs }">
+				<v-btn
+					large
+					v-bind="attrs"
+					v-on="on"
+					text
+					@click="triggerDarkMode()"
+				>
+					<v-icon>mdi-brightness-6</v-icon>
+				</v-btn>
+			</template>
+			<span>THEME</span>
+		</v-tooltip>
 
 		<v-tooltip bottom>
 			<template v-slot:activator="{ on, attrs }">
@@ -48,22 +57,23 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
-   name: 'NavBarComp',
-   computed: mapState({
-      labelView: state => state.settings.labelView,
-      labelType: state => state.settings.labelType
-   }),
-   methods: {
+	name: 'NavBarComp',
+	computed: mapState({
+		labelView: (state) => state.settings.labelView,
+		labelType: (state) => state.settings.labelType,
+	}),
+	methods: {
 		triggerDarkMode() {
-         this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-         localStorage.darkModeCng = this.$vuetify.theme.dark;
+			this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+			localStorage.darkModeCng = this.$vuetify.theme.dark
 		},
-   }
+	},
 }
 </script>
 
-<style>
+<style scoped>
+
 </style>

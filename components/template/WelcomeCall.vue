@@ -5,6 +5,7 @@
 			class="d-flex flex-column flex-start pa-0 welcomeCallBg"
 			autocomplete="off"
 			aria-autocomplete="off"
+			ref="welcome_form"
 		>
 			<v-card flat class="welcomeCallHi">
 				<h3 class="text-center">Welcome Call</h3>
@@ -15,8 +16,9 @@
 				filled
 				outlined
 				hide-details
-            :single-line="!labelType"
+				:single-line="!labelType"
 				:class="{ 'mb-2 mt-2': !labelView }"
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="ob_call_to"
 				background-color="inputBg"
 				color="inputLabel"
@@ -28,6 +30,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
 				v-model="phone"
@@ -43,6 +46,7 @@
 				hide-details
 				v-model="spoke_to"
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -60,6 +64,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
 				v-model="confirmed_patient_info"
@@ -79,6 +84,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="confirmed_md"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
@@ -94,6 +100,7 @@
 				outlined
 				hide-details
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				v-model="needs_by_date"
 				background-color="inputBg"
@@ -113,6 +120,7 @@
 				outlined
 				hide-details
 				:single-line="!labelType"
+            :rules="[ val => val.trim().length > 0 ]"
 				:class="{ 'mb-2': !labelView }"
 				v-model="offered_digital"
 				:style="template_input_style"
@@ -146,7 +154,7 @@
 			<v-textarea
 				outlined
 				hide-details
-				name="input-7-4"
+				ref="additional_comment_ref"
 				height="100px"
 				class="mb-0"
 				no-resize
@@ -187,13 +195,20 @@ export default {
 		labelView: (state) => state.settings.labelView,
 		labelType: (state) => state.settings.labelType,
 	}),
-	inputLabel() {
-		return this.$vuetify.theme.dark ? '#FFFFFF' : '#063f06'
-		// return this.$vuetify.theme.dark ? '#FFFFFF' : '#000000'
-	},
 
 	methods: {
 		welcome_result() {
+			this.$refs.welcome_form.validate()
+			console.dir(this.$refs.welcome_form)
+
+			if (
+				Object.values(this.$refs.welcome_form.errorBag)
+					.slice(0, -1)
+					.includes(true)
+			) {
+				return this.$vuetify.goTo(this.$refs.welcome_form)
+			}
+
 			this.welcome_call_result = `
             Welcome Call Details | Drug: ${this.$store.state.info.drugName} | OB Call To: ${this.ob_call_to} | Phone: ${this.phone} | Spoke To: ${this.spoke_to} | Confirmed Patient Info: ${this.confirmed_patient_info} | Confirmed MD: ${this.confirmed_md} | Needs By Date: ${this.needs_by_date} | Offered Digital: ${this.offered_digital} | Note Entered By: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Txt: 866-249-1556/1037646 | Addt'l Comments: ${this.additional_comment_welcome}
          `.trim()

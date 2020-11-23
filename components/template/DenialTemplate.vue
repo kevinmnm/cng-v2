@@ -5,6 +5,7 @@
 			class="d-flex flex-column flex-start pa-0 denialBg"
 			autocomplete="off"
 			aria-autocomplete="off"
+         ref="denial_form"
 		>
 			<v-card flat class="denialHi">
 				<h3 class="text-center">Denial Template</h3>
@@ -15,6 +16,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="denial_at_phone"
 				:single-line="!labelType"
 				:class="{ 'mb-2 mt-2': !labelView }"
@@ -28,6 +30,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="denial_spoke_to"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
@@ -47,6 +50,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
 				v-model="denial_via"
@@ -60,6 +64,7 @@
 				filled
 				outlined
 				hide-details
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="denial_at"
 				:single-line="!labelType"
 				:class="{ 'mb-2': !labelView }"
@@ -134,6 +139,12 @@ export default {
    },
    methods: {
       denial_result() {
+         this.$refs.denial_form.validate();
+
+         if ( Object.values(this.$refs.denial_form.errorBag).includes(true) ) {
+            return this.$vuetify.goTo(this.$refs.denial_form);
+         }
+
          this.denial_outcome = (`
             Denial/Triage BV Verification Details: Verifying: ${this.$store.state.info.drugName} | Template Type: Denial | Final Follow-up With Patient: Yes | At phone#: ${this.denial_at_phone} | Spoke to: ${this.denial_spoke_to} | Conversation/VM Detailed: ${this.conversation_voicemail_details} | Final Disposition sent to: MDO | Via: ${this.denial_via} | AT: ${this.denial_at} | Notified HUB (if ref source): N/A | Via: N/A | AT: N/A | Out of Network: No | If OON triage, explained that: N/A Is their network provider. Do they want their information sent to network provider?: N/A | Faxed pt. info to: N/A | At Fax#: N/A | Competitor Phone: N/A | Denial/Triage Reason: ${this.denial_reason} | Note entered by: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Ext: 866-249-1556/1037646 | Additional Comments: 
          `).trim();

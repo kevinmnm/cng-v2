@@ -5,6 +5,7 @@
 			class="d-flex flex-column flex-start pa-0 triageBg"
 			autocomplete="off"
 			aria-autocomplete="off"
+         ref="triage_form"
 		>
 			<v-card flat class="triageHi">
 				<h3 class="text-center">Triage Template</h3>
@@ -24,6 +25,7 @@
 				hide-details
 				:single-line="!labelType"
             :class="{ 'mb-2 mt-2': !labelView }"
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="which_triage"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -36,6 +38,7 @@
 				outlined
 				hide-details
 				v-model="triage_at_phone"
+            :rules="[ val => val.trim().length > 0 ]"
 				:single-line="!labelType"
             :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
@@ -49,6 +52,7 @@
 				outlined
 				hide-details
 				v-model="triage_spoke_to"
+            :rules="[ val => val.trim().length > 0 ]"
 				:single-line="!labelType"
             :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
@@ -242,6 +246,13 @@ export default {
    },
    methods: {
       triage_result(){
+         this.$refs.triage_form.validate();
+
+         if (Object.values(this.$refs.triage_form.errorBag).includes(true)){
+            return this.$vuetify.goTo(this.$refs.triage_form);
+         }
+
+
          this.triage_outcome = (`
             Denial/Triage BV Verification Details: Verifying: asdf | Template Type: Triage | Internal Triage to: ${this.internalTriageTo()} | AT: N/A | Final Follow-up With Patient of Triage: Yes | At phone#: ${this.triage_at_phone} | Spoke to: ${this.triage_spoke_to} | Conversation/VM Detailed: ${this.conversation_voicemail_details} | Final Disposition sent to: ${this.finalDispositionSentTo()}
          `).trim();

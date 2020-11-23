@@ -32,7 +32,12 @@
 							@change="login_password_error = false"
 						></v-text-field>
 					</v-form>
-					<v-checkbox dense label="Remember Username"></v-checkbox>
+					<v-checkbox
+						v-model="username_check"
+						@click="saveUsername()"
+						dense
+						label="Remember Username"
+					></v-checkbox>
 				</v-card-text>
 				<v-card-actions>
 					<v-btn
@@ -148,9 +153,18 @@
 			</v-card>
 		</v-col>
 		<v-dialog v-model="dialog" presistent>
-         <v-btn fab icon absolute small right color="primary" class="ma-3" @click="dialog = false">
-            <v-icon dense>mdi-close-thick</v-icon>
-         </v-btn>
+			<v-btn
+				fab
+				icon
+				absolute
+				small
+				right
+				color="primary"
+				class="ma-3"
+				@click="dialog = false"
+			>
+				<v-icon dense>mdi-close-thick</v-icon>
+			</v-btn>
 			<v-card tile>
 				<v-card-title class="headline">Signup Guide</v-card-title>
 				<v-list class="pa-0 ma-0" dense>
@@ -175,12 +189,13 @@
 </template>
 
 <script>
-import io from 'socket.io-client';
+import io from 'socket.io-client'
 
 export default {
 	name: 'LoginComp',
 	data() {
 		return {
+			username_check: null,
 			show_signup: false,
 			dialog: false,
 			login_username: '',
@@ -248,14 +263,23 @@ export default {
 		}
 	},
 	methods: {
+		saveUsername() {
+			if (this.username_check) {
+            localStorage.remember_username = true;
+			} else {
+				if (localStorage.remember_username) {
+					localStorage.removeItem('remember_username')
+				}
+			}
+		},
 		async loginFunction() {
 			this.login_loading = true
 			if (!this.login_username || !this.login_password) {
 				if (!this.login_username) this.login_username_error = true
 				if (!this.login_password) this.login_password_error = true
-				return this.login_loading = false;
-         }
-         
+				return (this.login_loading = false)
+			}
+
 			let response = await fetch(
 				this.$store.state.store.fetch_url + '/login',
 				{
@@ -263,42 +287,53 @@ export default {
 					method: 'POST',
 					body: JSON.stringify({
 						login_username: this.login_username,
-                  login_password: this.login_password
+						login_password: this.login_password,
 					}),
 				}
 			)
 
 			response.json().then((data) => {
 				if (data.logged) {
-               this.$store.commit('logged/SET_LOGGED', data.logged);
-               localStorage.token = 'Bearer ' + data.token;
-               const { firstName, lastName, username, email, _id } = data;
-               localStorage.firstName = firstName[0].toUpperCase() + firstName.substring(1).toLowerCase();
-               localStorage.lastName = lastName[0].toUpperCase() + lastName.substring(1).toLowerCase()
-               localStorage.username = username;
-               localStorage.email = email;
-               localStorage._id = _id;
+					this.$store.commit('logged/SET_LOGGED', data.logged)
+					localStorage.token = 'Bearer ' + data.token
+					const { firstName, lastName, username, email, _id } = data
+					localStorage.firstName =
+						firstName[0].toUpperCase() +
+						firstName.substring(1).toLowerCase()
+					localStorage.lastName =
+						lastName[0].toUpperCase() +
+						lastName.substring(1).toLowerCase()
+					localStorage.username = username
+					localStorage.email = email
+					localStorage._id = _id
 
-               if (localStorage.labelView) {
-                  this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView);
-               } else {
-                  this.$store.commit('settings/LABEL_VIEW_MUTATION', 'Dense');
-                  localStorage.labelView = 'Dense';
-               }
+					if (localStorage.labelView) {
+						this.$store.commit(
+							'settings/LABEL_VIEW_MUTATION',
+							localStorage.labelView
+						)
+					} else {
+						this.$store.commit('settings/LABEL_VIEW_MUTATION', 'Dense')
+						localStorage.labelView = 'Dense'
+					}
 
-               if (localStorage.labelType) {
-                  this.$store.commit('settings/LABEL_TYPE_MUTATION', localStorage.labelType);
-               } else {
-                  this.$store.commit('settings/LABEL_TYPE_MUTATION', 'Show');
-                  localStorage.labelType = 'Show';
-               }
-
+					if (localStorage.labelType) {
+						this.$store.commit(
+							'settings/LABEL_TYPE_MUTATION',
+							localStorage.labelType
+						)
+					} else {
+						this.$store.commit('settings/LABEL_TYPE_MUTATION', 'Show')
+						localStorage.labelType = 'Show'
+					}
 				} else {
-               this.login_loading = false;
-               if (data.msg === 'Invalid Username') this.login_username_error = true;
-               if (data.msg === 'Invalid Password') this.login_password_error = true;
-               alert(data.msg);
-            }
+					this.login_loading = false
+					if (data.msg === 'Invalid Username')
+						this.login_username_error = true
+					if (data.msg === 'Invalid Password')
+						this.login_password_error = true
+					alert(data.msg)
+				}
 			})
 		},
 		async showSignup() {
@@ -320,30 +355,36 @@ export default {
 				this.$store.state.store.fetch_url + '/signup',
 				{
 					headers: { 'Content-Type': 'application/json' },
-               method: 'POST',
+					method: 'POST',
 					body: JSON.stringify({
 						email: this.validator_list[0].signup_email.text,
 						first_name: this.validator_list[0].signup_first_name.text,
 						last_name: this.validator_list[0].signup_last_name.text,
 						username: this.validator_list[0].signup_username.text,
 						password: this.validator_list[0].signup_password.text,
-						password_verify: this.validator_list[0].signup_password_verify.text,
-					})
+						password_verify: this.validator_list[0].signup_password_verify
+							.text,
+					}),
 				}
 			)
 
 			response.json().then((res) => {
-            console.log(res);
+				console.log(res)
 				if (response.status === 200 && res.signedUp) {
-               alert(res.msg);
-					location.reload();
+					alert(res.msg)
+					location.reload()
 				}
 			})
 		},
 	},
-   mounted() {
-      this.$vuetify.theme.dark = false;
-   }
+	mounted() {
+		this.$vuetify.theme.dark = false
+
+		if (localStorage.remember_username === 'true') {
+         this.username_check = true;
+         this.login_username = localStorage.username;
+		}
+	},
 }
 </script>
 
