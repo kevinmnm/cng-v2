@@ -86,6 +86,7 @@
 				label="Denial Reason"
 				height="70px"
 				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				no-resize
 				v-model="denial_reason"
 				:style="template_input_style"
@@ -95,8 +96,6 @@
 			<v-btn
 				width="100%"
 				height="50px"
-				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
 				small
 				depressed
 				outlined
@@ -108,7 +107,6 @@
 				outlined
 				hide-details
 				height="100px"
-								:class="{ 'mb-2': !labelView }"
 				no-resize
 				background-color="inputBg"
 				color="inputLabel"

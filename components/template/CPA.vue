@@ -62,8 +62,7 @@
 				v-show="was_cpa_offered !== 'Yes'"
 				width="100%"
 				height="50px"
-				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
+            class="ma-0 pa-0"
 				small
 				depressed
 				outlined
@@ -75,10 +74,7 @@
 				v-show="was_cpa_offered !== 'Yes'"
 				outlined
 				hide-details
-				name="input-7-4"
 				height="100px"
-				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
 				no-resize
 				background-color="inputBg"
 				color="inputLabel"

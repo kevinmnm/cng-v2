@@ -52,11 +52,10 @@
          <v-btn
 				width="100%"
 				height="50px"
-				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
 				small
 				depressed
 				outlined
+            class="ma-0 pa-0"
 				:style="template_input_style"
 				@click="priorAuth_result()"
 				>Generate & Copy</v-btn
@@ -64,11 +63,9 @@
          <v-textarea
 				outlined
 				hide-details
-				name="input-7-4"
 				height="100px"
-				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
 				no-resize
+            class="mb-0"
 				background-color="inputBg"
 				color="inputLabel"
 				v-model="pa_result"

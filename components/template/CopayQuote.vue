@@ -21,7 +21,7 @@
 				color="inputLabel"
 				:style="template_input_style"
             :single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
+				:class="{ 'mb-2 mt-2': !labelView }"
 			></v-text-field>
          <v-text-field
 				label="Activated to pharmacy location"
@@ -63,8 +63,6 @@
 				depressed
 				outlined
 				:style="template_input_style"
-            :single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
 				@click="copay_quote_result()"
 				>Generate & Copy</v-btn
 			>

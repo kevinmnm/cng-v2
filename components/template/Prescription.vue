@@ -17,7 +17,7 @@
 				hide-details
 				v-model="icd_10"
 				:single-line="!labelType"
-				:class="{ 'mb-2': !labelView }"
+				:class="{ 'mb-2 mt-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -345,7 +345,6 @@
 			<v-textarea
 				outlined
 				hide-details
-				name="input-7-4"
 				height="100px"
 				class="mb-0"
 				no-resize

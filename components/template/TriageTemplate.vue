@@ -22,7 +22,8 @@
 				filled
 				outlined
 				hide-details
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2 mt-2': !labelView }"
 				v-model="which_triage"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -35,7 +36,8 @@
 				outlined
 				hide-details
 				v-model="triage_at_phone"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -47,7 +49,8 @@
 				outlined
 				hide-details
 				v-model="triage_spoke_to"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -68,7 +71,8 @@
 				filled
 				outlined
 				hide-details
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				v-model="internal_triage_to"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -85,7 +89,8 @@
 				outlined
 				hide-details
 				v-model="to_which_pharmacy"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -98,7 +103,8 @@
 				outlined
 				hide-details
 				v-model="competitor_fax"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -111,7 +117,8 @@
 				outlined
 				hide-details
 				v-model="competitor_phone"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -138,7 +145,8 @@
 				filled
 				outlined
 				hide-details
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				v-model="triage_via"
 				:style="template_input_style"
 				background-color="inputBg"
@@ -152,7 +160,8 @@
 				outlined
 				hide-details
 				v-model="triage_at"
-				class="mb-2 mt-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				background-color="inputBg"
 				color="inputLabel"
 				:style="template_input_style"
@@ -163,7 +172,8 @@
 				hide-details
 				label="Conversation/Voicemail Details"
 				height="70px"
-				class="mb-2"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				no-resize
 				v-model="conversation_voicemail_details"
 				:style="template_input_style"
@@ -175,7 +185,8 @@
 				hide-details
 				label="Triage Reason"
 				height="70px"
-				class="mb-0"
+				:single-line="!labelType"
+            :class="{ 'mb-2': !labelView }"
 				no-resize
 				v-model="triage_reason"
 				:style="template_input_style"

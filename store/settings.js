@@ -6,9 +6,11 @@ export const state = () => ({
 export const mutations = {
    LABEL_VIEW_MUTATION(state, payload){
       (payload === 'Dense') ?  state.labelView = true : state.labelView = false;
+      localStorage.labelView = payload;
    },
    LABEL_TYPE_MUTATION(state, payload){
       (payload === 'Show') ? state.labelType = true : state.labelType = false;
+      localStorage.labelType = payload;
    }
 }
 
@@ -28,7 +30,6 @@ export const actions = {
 
       resp.json().then( res => {
          commit('LABEL_TYPE_MUTATION', res._doc.labelType);
-         console.log(res._doc.labelType);
       });
    },
    async fetchLabelView({commit}, payload) {
