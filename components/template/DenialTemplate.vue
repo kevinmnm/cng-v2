@@ -1,13 +1,13 @@
 <template>
 	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid blue"
+			style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 denialBg"
 			autocomplete="off"
 			aria-autocomplete="off"
          ref="denial_form"
 		>
-			<v-card flat class="denialHi">
+			<v-card flat tile class="denialHi">
 				<h3 class="text-center">Denial Template</h3>
 			</v-card>
 			<v-text-field

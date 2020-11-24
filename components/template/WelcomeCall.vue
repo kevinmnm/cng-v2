@@ -1,13 +1,13 @@
 <template>
 	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid green"
+			style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 welcomeCallBg"
 			autocomplete="off"
 			aria-autocomplete="off"
 			ref="welcome_form"
 		>
-			<v-card flat class="welcomeCallHi">
+			<v-card flat tile class="welcomeCallHi">
 				<h3 class="text-center">Welcome Call</h3>
 			</v-card>
 			<v-text-field

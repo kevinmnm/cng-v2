@@ -325,7 +325,10 @@ export default {
 					} else {
 						this.$store.commit('settings/LABEL_TYPE_MUTATION', 'Show')
 						localStorage.labelType = 'Show'
-					}
+               }
+               
+               this.$store.commit('settings/SETTINGS_MUTATION', [data.confirmReset, 'confirmReset']);
+
 				} else {
 					this.login_loading = false
 					if (data.msg === 'Invalid Username')

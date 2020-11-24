@@ -7,7 +7,7 @@
 					class="prescriptionHi"
 					@click="set_plan_type('caremark')"
 					width="100%"
-               v-show="plan_type_button"
+					v-show="plan_type_button"
 					>caremark</v-btn
 				>
 			</v-col>
@@ -16,7 +16,7 @@
 					class="nonCaremark"
 					@click="set_plan_type('non-caremark')"
 					width="100%"
-               v-show="plan_type_button"
+					v-show="plan_type_button"
 					>non-caremark</v-btn
 				>
 			</v-col>
@@ -120,6 +120,7 @@
 					]"
 					label="Choose"
 					v-model="case_outcome"
+					@change="case_outcome_handler()"
 				></v-select>
 			</v-card>
 		</v-sheet>
@@ -129,22 +130,95 @@
 			ref="template_wrapper"
 			v-if="case_outcome"
 		>
-			<!-- <WelcomeCallTemplate :key="'welcome' + Math.random()" />
-			<PrescriptionTemplate :key="'prescription' + Math.random()" />
-			<PriorAuthTemplate :key="'pa' + Math.random()" />
-			<CPATemplate :key="'cpa' + Math.random()" />
-			<CopayQuoteTemplate :key="'copayquote' + Math.random()" />
-			<DenialTemplate :key="'denial' + Math.random()" />
-			<TriageTemplate :key="'triage' + Math.random()" /> -->
-         <WelcomeCallTemplate />
+			<WelcomeCallTemplate
+				v-show="templates.show_WelcomeCallTemplate"
+				:key="'welcome' + Math.random()"
+			/>
+			<PrescriptionTemplate
+				v-show="
+					plan_type === 'caremark' && templates.show_PrescriptionTemplate
+				"
+				:key="'prescription' + Math.random()"
+			/>
+			<PriorAuthTemplate
+				v-show="templates.show_PriorAuthTemplate"
+				:key="'pa' + Math.random()"
+			/>
+			<CPATemplate
+				v-show="templates.show_CPATemplate"
+				:key="'cpa' + Math.random()"
+			/>
+			<CopayQuoteTemplate
+				v-show="templates.show_CopayQuoteTemplate"
+				:key="'copayquote' + Math.random()"
+			/>
+			<DenialTemplate
+				v-show="templates.show_DenialTemplate"
+				:key="'denial' + Math.random()"
+			/>
+			<TriageTemplate
+				v-show="templates.show_TriageTemplate"
+				:key="'triage' + Math.random()"
+			/>
+			<!-- <WelcomeCallTemplate />
 			<PrescriptionTemplate />
 			<PriorAuthTemplate />
 			<CPATemplate/>
 			<CopayQuoteTemplate />
 			<DenialTemplate />
-			<TriageTemplate />
+			<TriageTemplate /> -->
 		</v-sheet>
-		<v-btn v-show="plan_type" @click="reset_all_templates()">reset</v-btn>
+		<v-col cols="12" class="d-flex justify-center" v-if="!confirmReset">
+			<v-btn
+				class="pa-10"
+				width="40%"
+				color="primary"
+				style="font-size: 30px"
+				v-show="plan_type"
+				@click="reset_all_templates()"
+				>reset all</v-btn
+			>
+		</v-col>
+
+		<v-col cols="12" class="d-flex justify-center" v-if="confirmReset">
+			<v-dialog v-model="confirm_dialog" persistent max-width="290">
+				<template v-slot:activator="{ on, attrs }">
+					<v-btn
+						class="pa-10"
+						width="40%"
+						color="primary"
+						style="font-size: 30px"
+						v-show="plan_type"
+						v-bind="attrs"
+						v-on="on"
+						>reset all</v-btn
+					>
+				</template>
+				<v-card outlined>
+					<v-card-title class="headline text-center">
+						Are you sure you want to reset all?
+					</v-card-title>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn
+							color="shades"
+							width="100px"
+							@click="confirm_dialog = false"
+						>
+							no
+						</v-btn>
+						<v-btn
+							color="deep-orange"
+							dark
+							width="100px"
+							@click="reset_all_templates(), (confirm_dialog = false)"
+						>
+							yes
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
+		</v-col>
 	</v-col>
 </template>
 
@@ -174,32 +248,137 @@ export default {
 	},
 	data() {
 		return {
-         plan_type: false,
-         plan_type_button: true,
+			plan_type: false,
+			plan_type_button: true,
 			case_outcome: '',
 			drugName: '',
 			ndc: '',
 			strength: '',
 			dos: '',
 			quantity: '',
+			templates: {
+				show_WelcomeCallTemplate: false,
+				show_PrescriptionTemplate: false,
+				show_PriorAuthTemplate: false,
+				show_CPATemplate: false,
+				show_CopayQuoteTemplate: false,
+				show_DenialTemplate: false,
+				show_TriageTemplate: false,
+			},
+			confirm_dialog: false,
 		}
 	},
 	computed: mapState({
 		fetch_url(state) {
 			return state.store.fetch_url
-      }
+		},
+		confirmReset(state) {
+			return state.settings.confirmReset
+		},
 	}),
 	methods: {
+		case_outcome_handler() {
+			switch (this.case_outcome) {
+				case 'PA initial':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					break
+
+				case 'Copay $25 or less':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_PriorAuthTemplate = true
+					this.templates.show_CopayQuoteTemplate = true
+					// cpa already applied template needed.
+					break
+
+				case 'CPA attempt #1':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_PriorAuthTemplate = true
+					break
+
+				case 'CPA attempt #2':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_PriorAuthTemplate = true
+					this.templates.show_CPATemplate = true
+					this.templates.show_CopayQuoteTemplate = true
+					break
+
+				case 'Patient denies CPA':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PriorAuthTemplate = true
+               this.templates.show_CPATemplate = true
+					this.templates.show_CopayQuoteTemplate = true
+					break
+
+				case 'Copay is over $25 for Medicare/Medicaid':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_WelcomeCallTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_PriorAuthTemplate = true
+					this.templates.show_CopayQuoteTemplate = true
+					break
+
+				case 'External/Internal triage':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_TriageTemplate = true
+					break
+
+				case 'PA denial template':
+					for (let each in this.templates) {
+						this.templates[each] = false
+					}
+					this.templates.show_DenialTemplate = true
+					break
+			}
+		},
 		set_plan_type(type) {
-         this.plan_type = type;
-         this.plan_type_button = false;
+			this.plan_type = type
+			this.plan_type_button = false
 		},
 		reset_all_templates() {
-			// this.$refs.template_wrapper.$children[0].$children.reset();
-         // console.dir(this.$refs.template_wrapper.$children[0].$children)
-         // this.$forceUpdate();
-         // this.$store.commit('store/FORCE_UPDATE', Math.random());
-         this.$forceUpdate();
+			this.drugName = ''
+			this.$store.commit('info/SET_DRUGNAME', this.drugName)
+
+			this.strength = ''
+			this.$store.commit('info/SET_STRENGTH', this.strength)
+
+			this.quantity = ''
+			this.$store.commit('info/SET_QUANTITY', this.quantity)
+
+			this.dos = ''
+			this.$store.commit('info/SET_DOS', this.dos)
+
+			this.ndc = ''
+			this.$store.commit('info/SET_NDC', this.ndc)
+
+			this.case_outcome = ''
+			this.plan_type = false
+			this.plan_type_button = true
+
+			this.$forceUpdate()
 		},
 	},
 	mounted() {
@@ -219,7 +398,7 @@ export default {
 			} else {
 				this.$vuetify.theme.dark = false
 			}
-		}
+      }
 	},
 }
 </script>

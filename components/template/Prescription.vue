@@ -1,13 +1,13 @@
 <template>
 	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid red"
+			style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 prescriptionBg"
 			autocomplete="off"
 			aria-autocomplete="off"
          ref="prescription_form"
 		>
-			<v-card flat class="prescriptionHi">
+			<v-card flat tile class="prescriptionHi">
 				<h3 class="text-center">Prescription</h3>
 			</v-card>
 			<v-text-field

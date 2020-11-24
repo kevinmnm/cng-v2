@@ -1,13 +1,13 @@
 <template>
 	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid blue"
+			style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 triageBg"
 			autocomplete="off"
 			aria-autocomplete="off"
          ref="triage_form"
 		>
-			<v-card flat class="triageHi">
+			<v-card flat tile class="triageHi">
 				<h3 class="text-center">Triage Template</h3>
 			</v-card>
 

@@ -1,6 +1,6 @@
 <template>
 	<v-row>
-      <LoggedComp v-if="logged" :key="update_key"></LoggedComp>
+      <LoggedComp v-if="logged"></LoggedComp>
 		<LoginComp v-else></LoginComp>
 	</v-row>
 </template>
@@ -18,7 +18,6 @@ export default {
 	},
    computed: mapState({
       logged: state => state.logged.logged, // Initially false in store.
-      update_key: state => state.store.update_key
    }),
 }
 </script>

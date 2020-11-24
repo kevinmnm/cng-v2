@@ -1,12 +1,13 @@
 <template>
 	<v-col cols="12" :class="template_style_class">
 		<v-form
-			style="border: 2px solid blue"
+			style="box-shadow: 0 0 5px black;"
 			class="d-flex flex-column flex-start pa-0 cpaBg"
 			autocomplete="off"
 			aria-autocomplete="off"
+         ref="cpa_form"
 		>
-			<v-card flat class="cpaHi">
+			<v-card flat tile class="cpaHi">
 				<h3 class="text-center">Copay Assistance</h3>
 			</v-card>
 
@@ -24,6 +25,7 @@
 				hide-details
 				:single-line="!labelType"
 				:class="{ 'mb-2 mt-2': !labelView }"
+            :rules="[ val => val.trim().length > 0 ]"
 				v-model="was_cpa_offered"
 				:style="template_input_style"
 				:error="cpa_error"
