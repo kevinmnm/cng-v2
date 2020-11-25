@@ -9,7 +9,7 @@ export const mutations = {
    },
    FORCE_UPDATE(state, payload) {
       state.update_key = payload;
-   }
+   },
 }
 
 // export const actions = {
