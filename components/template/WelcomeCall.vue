@@ -10,6 +10,7 @@
 			<v-card flat tile class="welcomeCallHi">
 				<h3 class="text-center">Welcome Call</h3>
 			</v-card>
+         <v-divider></v-divider>
 			<v-text-field
 				label="OB Call To"
 				dense
@@ -94,7 +95,6 @@
 			></v-select>
 			<v-text-field
 				label="Needs By Date"
-				placeholder="mm/dd/yyyy"
 				dense
 				filled
 				outlined
@@ -152,11 +152,10 @@
 				>Generate & Copy</v-btn
 			>
 			<v-textarea
+				class="welcome-call-result mb-0"
 				outlined
 				hide-details
-				ref="additional_comment_ref"
 				height="100px"
-				class="mb-0"
 				no-resize
 				background-color="inputBg"
 				color="inputLabel"
@@ -199,7 +198,6 @@ export default {
 	methods: {
 		welcome_result() {
 			this.$refs.welcome_form.validate()
-			console.dir(this.$refs.welcome_form)
 
 			if (
 				Object.values(this.$refs.welcome_form.errorBag)
@@ -211,13 +209,33 @@ export default {
 
 			this.welcome_call_result = `
             Welcome Call Details | Drug: ${this.$store.state.info.drugName} | OB Call To: ${this.ob_call_to} | Phone: ${this.phone} | Spoke To: ${this.spoke_to} | Confirmed Patient Info: ${this.confirmed_patient_info} | Confirmed MD: ${this.confirmed_md} | Needs By Date: ${this.needs_by_date} | Offered Digital: ${this.offered_digital} | Note Entered By: ${localStorage.firstName} ${localStorage.lastName} | Department: BV AID | Phone Number/Txt: 866-249-1556/1037646 | Addt'l Comments: ${this.additional_comment_welcome}
-         `.trim()
+         `.trim();
+
+         this.$copyText(this.welcome_call_result);
       }
-		// test() {
-		//    window.socket.emit('customEvent2', {
-		//       some: 'data'
-		//    });
-		// }
-	},
+   },
+   mounted(){
+      if (localStorage.needsByDate){
+         this.needs_by_date = localStorage.needsByDate;
+      } else {
+         this.needs_by_date = '';
+      }
+   }
 }
 </script>
+
+<style scoped>
+
+.theme--light.v-label--active {
+   font-family: Arial, Helvetica, sans-serif;
+   border-radius: 3px;
+   background-color: whitesmoke;
+}
+
+.theme--dark.v-label--active {
+   font-family: Arial, Helvetica, sans-serif;
+   border-radius: 3px;
+   background-color: #000000;
+}
+
+</style>

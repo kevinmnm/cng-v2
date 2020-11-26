@@ -20,7 +20,7 @@ export default {
    css: [],
 
    // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-   plugins: [],
+   plugins: ['~/plugins/vue-clipboard.js'],
 
    // Auto import components (https://go.nuxtjs.dev/config-components)
    components: true,
@@ -43,7 +43,10 @@ export default {
          dark: false,
          themes: {
             light: {
+               defaultText: '#000000',
+               reverseText: '#ffffff',
                nonCaremark: '#f0d39e',
+               nonCaremarkHi: '#ffd485',
                inputBg: '#FFFFFF',
                // inputLabel: '#063f06',
                inputLabel: '#000000',
@@ -63,15 +66,17 @@ export default {
                triageHi: '#ffff65'               
             },
             dark: {
-               primary: colors.blue.darken2,
                accent: colors.grey.darken3,
                secondary: colors.amber.darken3,
                info: colors.teal.lighten1,
-               warning: colors.amber.base,
+               // warning: colors.amber.base,
                error: colors.deepOrange.accent4,
                success: colors.green.accent3,
                
+               defaultText: '#ffffff',
+               reverseText: '#000000',
                nonCaremark: '#614615',
+               nonCaremarkHi: '#614513',
                inputBg: '#404040',
                inputLabel: '#FFFFFF',
                welcomeCallBg: '#489b48',

@@ -10,7 +10,7 @@
 			<v-card flat tile class="triageHi">
 				<h3 class="text-center">Triage Template</h3>
 			</v-card>
-
+         <v-divider></v-divider>
          <v-select
 				label="Triage Type"
 				:items="['Internal', 'External']"
@@ -287,3 +287,19 @@ export default {
    })
 }
 </script>
+
+<style scoped>
+
+.theme--light.v-label--active {
+   font-family: Arial, Helvetica, sans-serif;
+   border-radius: 3px;
+   background-color: whitesmoke;
+}
+
+.theme--dark.v-label--active {
+   font-family: Arial, Helvetica, sans-serif;
+   border-radius: 3px;
+   background-color: #000000;
+}
+
+</style>

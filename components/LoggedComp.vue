@@ -1,27 +1,38 @@
 <template>
 	<v-col cols="12">
 		<Navbar />
-		<v-sheet class="d-flex justify-center flex-row">
+		<v-sheet class="d-flex justify-center flex-row" v-if="plan_type_button">
 			<v-col cols="6" class="text-center">
 				<v-btn
-					class="prescriptionHi"
+					class="prescriptionHi font-weight-bold"
 					@click="set_plan_type('caremark')"
 					width="100%"
 					v-show="plan_type_button"
+               style="font-size: 18px;"
+               large
 					>caremark</v-btn
 				>
 			</v-col>
 			<v-col cols="6" class="text-center">
 				<v-btn
-					class="nonCaremark"
+					class="nonCaremark font-weight-bold"
 					@click="set_plan_type('non-caremark')"
 					width="100%"
 					v-show="plan_type_button"
+               style="font-size: 18px;"
+               large
 					>non-caremark</v-btn
 				>
 			</v-col>
 		</v-sheet>
-		<v-card outlined class="font-weight-bold text-center mb-6">
+		<v-card
+			outlined
+			class="font-weight-bold text-center mb-6"
+			:class="[
+				{ 'prescriptionHi': plan_type === 'caremark' },
+				{ 'nonCaremark': plan_type === 'non-caremark' },
+			]"
+		>
 			<h2>{{ plan_type ? plan_type.toUpperCase() : null }}</h2>
 		</v-card>
 		<v-sheet class="mb-4" elevation="2" v-show="plan_type">
@@ -44,6 +55,8 @@
 						outlined
 						dense
 						v-model="drugName"
+						:rules="[(val) => val.trim().length > 0]"
+						validate-on-blur
 						@change="$store.commit('info/SET_DRUGNAME', drugName)"
 					></v-text-field>
 				</v-card>
@@ -56,6 +69,8 @@
 						outlined
 						dense
 						v-model="strength"
+						:rules="[(val) => val.trim().length > 0]"
+						validate-on-blur
 						@change="$store.commit('info/SET_STRENGTH', strength)"
 					></v-text-field>
 				</v-card>
@@ -68,6 +83,8 @@
 						outlined
 						dense
 						v-model="quantity"
+						:rules="[(val) => val.trim().length > 0]"
+						validate-on-blur
 						@change="$store.commit('info/SET_QUANTITY', quantity)"
 					></v-text-field>
 				</v-card>
@@ -80,6 +97,8 @@
 						outlined
 						dense
 						v-model="dos"
+						:rules="[(val) => val.trim().length > 0]"
+						validate-on-blur
 						@change="$store.commit('info/SET_DOS', dos)"
 					></v-text-field>
 				</v-card>
@@ -92,36 +111,61 @@
 						outlined
 						dense
 						v-model="ndc"
+						:rules="[(val) => val.trim().length > 0]"
+						validate-on-blur
 						@change="$store.commit('info/SET_NDC', ndc)"
 					></v-text-field>
 				</v-card>
 			</v-card>
-			<v-card class="mt-10">
+			<v-card class="mt-10" v-show="show_case_outcome">
 				<h2 class="text-center mb-2">Case Outcome</h2>
 				<v-select
 					:menu-props="{
 						top: false,
 						offsetY: true,
 						'allow-overflow': true,
+						maxHeight: '100%',
 					}"
+					full-width
 					outlined
-					solo
 					filled
+					solo
 					hide-details
-					:items="[
-						'PA initial',
-						'Copay $25 or less',
-						'CPA attempt #1',
-						'CPA attempt #2',
-						'Ptient denies CPA',
-						'Copay is over $25 for Medicare/Medicaid',
-						'External/Internal triage',
-						'PA denial template',
-					]"
+					:items="select_items"
 					label="Choose"
 					v-model="case_outcome"
 					@change="case_outcome_handler()"
-				></v-select>
+				>
+					<template
+						#selection="{ item }"
+						style="position: absolute; width: 100%"
+					>
+						<div class="selected-items">
+							{{ item }}
+						</div>
+					</template>
+					<template #item="{ item }">
+						<div
+							class="select-items"
+							:class="[
+								{ prescriptionBg: item.includes('PA initial') },
+                        { welcomeCallBg: item.includes('Copay $25 or less') },
+								{ welcomeCallBg: item.includes('CPA attempt #1') },
+								{ welcomeCallBg: item.includes('CPA attempt #2') },
+								{ welcomeCallBg: item.includes('Patient denies CPA') },
+								{
+									welcomeCallBg: item.includes(
+										'Copay is over $25 for Medicare/Medicaid'
+									),
+								},
+								{ triageBg: item.includes('External/Internal triage') },
+								{ denialBg: item.includes('PA denial template') },
+							]"
+						>
+							{{ item }}
+						</div>
+					</template>
+				</v-select>
 			</v-card>
 		</v-sheet>
 		<v-sheet
@@ -131,49 +175,54 @@
 			v-if="case_outcome"
 		>
 			<WelcomeCallTemplate
-				v-show="templates.show_WelcomeCallTemplate"
-				:key="'welcome' + Math.random()"
+				v-show="templates.show_WelcomeCallTemplate && show_case_outcome"
+				:key="'welcome' + updater"
 			/>
 			<PrescriptionTemplate
 				v-show="
-					plan_type === 'caremark' && templates.show_PrescriptionTemplate
+					plan_type === 'caremark' &&
+					templates.show_PrescriptionTemplate &&
+					show_case_outcome
 				"
-				:key="'prescription' + Math.random()"
+				:key="'prescription' + updater"
 			/>
+         <NonCaremarkTemplate
+            v-show="
+               plan_type === 'non-caremark' &&
+               templates.show_NonCaremarkTemplate &&
+               show_case_outcome
+            "
+            :key="'non-prescription' + updater"
+         />
 			<PriorAuthTemplate
-				v-show="templates.show_PriorAuthTemplate"
-				:key="'pa' + Math.random()"
+				v-show="templates.show_PriorAuthTemplate && show_case_outcome"
+				:key="'pa' + updater"
 			/>
 			<CPATemplate
-				v-show="templates.show_CPATemplate"
-				:key="'cpa' + Math.random()"
+				v-show="templates.show_CPATemplate && show_case_outcome"
+				:key="'cpa' + updater"
 			/>
 			<CopayQuoteTemplate
-				v-show="templates.show_CopayQuoteTemplate"
-				:key="'copayquote' + Math.random()"
+				v-show="templates.show_CopayQuoteTemplate && show_case_outcome"
+				:key="'copayquote' + updater"
 			/>
 			<DenialTemplate
-				v-show="templates.show_DenialTemplate"
-				:key="'denial' + Math.random()"
+				v-show="templates.show_DenialTemplate && show_case_outcome"
+				:key="'denial' + updater"
 			/>
 			<TriageTemplate
-				v-show="templates.show_TriageTemplate"
-				:key="'triage' + Math.random()"
+				v-show="templates.show_TriageTemplate && show_case_outcome"
+				:key="'triage' + updater"
 			/>
-			<!-- <WelcomeCallTemplate />
-			<PrescriptionTemplate />
-			<PriorAuthTemplate />
-			<CPATemplate/>
-			<CopayQuoteTemplate />
-			<DenialTemplate />
-			<TriageTemplate /> -->
+
+         <CPAapplied v-show="templates.show_CPAapplied" :key="'already' + updater" />
 		</v-sheet>
-		<v-col cols="12" class="d-flex justify-center" v-if="!confirmReset">
+		<v-col cols="12" class="d-flex ma-auto justify-center col-sm-6" v-if="!confirmReset">
 			<v-btn
 				class="pa-10"
-				width="40%"
+				width="100%"
 				color="primary"
-				style="font-size: 30px"
+				style="font-size: 25px"
 				v-show="plan_type"
 				@click="reset_all_templates()"
 				>reset all</v-btn
@@ -187,7 +236,7 @@
 						class="pa-10"
 						width="40%"
 						color="primary"
-						style="font-size: 30px"
+						style="font-size: 25px"
 						v-show="plan_type"
 						v-bind="attrs"
 						v-on="on"
@@ -219,6 +268,7 @@
 				</v-card>
 			</v-dialog>
 		</v-col>
+      <ButtonScroll />
 	</v-col>
 </template>
 
@@ -233,6 +283,9 @@ import CPATemplate from './template/CPA.vue'
 import CopayQuoteTemplate from './template/CopayQuote.vue'
 import DenialTemplate from './template/DenialTemplate.vue'
 import TriageTemplate from './template/TriageTemplate.vue'
+import CPAapplied from './template/CPAapplied.vue'
+import NonCaremarkTemplate from './template/NonCaremark.vue'
+import ButtonScroll from './ButtonScroll.vue'
 
 export default {
 	name: 'LoggedComp',
@@ -244,10 +297,14 @@ export default {
 		CPATemplate,
 		CopayQuoteTemplate,
 		DenialTemplate,
-		TriageTemplate,
+      TriageTemplate,
+      CPAapplied,
+      NonCaremarkTemplate,
+      ButtonScroll
 	},
 	data() {
 		return {
+         updater: 2,
 			plan_type: false,
 			plan_type_button: true,
 			case_outcome: '',
@@ -258,14 +315,26 @@ export default {
 			quantity: '',
 			templates: {
 				show_WelcomeCallTemplate: false,
-				show_PrescriptionTemplate: false,
+            show_PrescriptionTemplate: false,
+            show_NonCaremarkTemplate: false,
 				show_PriorAuthTemplate: false,
 				show_CPATemplate: false,
 				show_CopayQuoteTemplate: false,
-				show_DenialTemplate: false,
+            show_DenialTemplate: false,
+            show_CPAapplied: false,
 				show_TriageTemplate: false,
 			},
 			confirm_dialog: false,
+			select_items: [
+				'PA initial',
+				'Copay $25 or less',
+				'CPA attempt #1',
+				'CPA attempt #2',
+				'Patient denies CPA',
+				'Copay is over $25 for Medicare/Medicaid',
+				'External/Internal triage',
+				'PA denial template',
+			],
 		}
 	},
 	computed: mapState({
@@ -274,6 +343,17 @@ export default {
 		},
 		confirmReset(state) {
 			return state.settings.confirmReset
+		},
+		show_case_outcome() {
+			if (
+				this.drugName &&
+				this.ndc &&
+				this.strength &&
+				this.dos &&
+				this.quantity
+			) {
+				return true
+			}
 		},
 	}),
 	methods: {
@@ -284,7 +364,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
 					break
 
 				case 'Copay $25 or less':
@@ -292,10 +373,11 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
-					this.templates.show_CopayQuoteTemplate = true
-					// cpa already applied template needed.
+               this.templates.show_CopayQuoteTemplate = true
+               this.templates.show_CPAapplied = true
 					break
 
 				case 'CPA attempt #1':
@@ -303,7 +385,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					break
 
@@ -312,7 +395,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					this.templates.show_CPATemplate = true
 					this.templates.show_CopayQuoteTemplate = true
@@ -323,9 +407,10 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
-               this.templates.show_PriorAuthTemplate = true
-               this.templates.show_CPATemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PriorAuthTemplate = true
+					this.templates.show_CPATemplate = true
 					this.templates.show_CopayQuoteTemplate = true
 					break
 
@@ -334,7 +419,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-					this.templates.show_PrescriptionTemplate = true
+               this.templates.show_PrescriptionTemplate = true
+               this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					this.templates.show_CopayQuoteTemplate = true
 					break
@@ -378,7 +464,8 @@ export default {
 			this.plan_type = false
 			this.plan_type_button = true
 
-			this.$forceUpdate()
+         // this.$forceUpdate()
+         this.updater++;
 		},
 	},
 	mounted() {
@@ -398,10 +485,33 @@ export default {
 			} else {
 				this.$vuetify.theme.dark = false
 			}
-      }
+		}
 	},
 }
 </script>
 
-<style>
+<style scoped>
+.select-items {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	font-weight: bold;
+	text-indent: 10px;
+	font-size: 18px;
+	opacity: 0.8;
+}
+
+.select-items:hover {
+	font-size: 20px;
+	opacity: 1;
+}
+
+.selected-items {
+	font-weight: bold;
+	font-size: 18px;
+}
 </style>

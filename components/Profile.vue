@@ -11,7 +11,7 @@
 						outlined
 						disabled
 						label="USERNAME"
-						value="sadf"
+						:value="username_value"
 						class="profile-input"
 						style="font-weight: bold"
 					></v-text-field>
@@ -24,7 +24,7 @@
 						outlined
 						disabled
 						label="First Name"
-						value="sadf"
+						:value="firstName_value"
 						class="profile-input"
 						style="font-weight: bold"
 					></v-text-field>
@@ -37,11 +37,58 @@
 						disabled
 						outlined
 						label="Last Name"
-						value="sadf"
+						:value="lastName_value"
 						class="profile-input"
 						style="font-weight: bold"
 					></v-text-field>
 				</v-card>
+			</v-col>
+		</v-sheet>
+		<v-sheet>
+			<h2 class="text-center">Needs By Date</h2>
+			<v-col cols="12" class="col-md-6 ma-auto">
+				<v-text-field
+               label="mm/dd/yyyy"
+					dense
+					filled
+					flat
+					outlined
+               autocomplete="off"
+               :single-line="!labelType"
+					:class="{ 'mb-2': !labelView }"
+               background-color="inputBg"
+					color="inputLabel"
+               v-model="needs_by_date"
+					class="profile-input"
+					style="font-weight: bold"
+               @blur="save_needs_by_date()"
+				></v-text-field>
+			</v-col>
+		</v-sheet>
+      <v-sheet>
+			<v-col cols="12" class="col-md-6 ma-auto">
+				<h2 class="text-center">Button</h2>
+				<v-select
+					label="Auto Scroll Button"
+					:menu-props="{
+						top: false,
+						offsetY: true,
+						'allow-overflow': true,
+					}"
+					:items="['Show', 'Hide']"
+					dense
+					filled
+					outlined
+					hide-details
+					:single-line="!labelType"
+					:class="{ 'mb-2': !labelView }"
+					v-model="button"
+					:style="template_input_style"
+					background-color="inputBg"
+					color="inputLabel"
+               @change="fetch_settings_handler(button, fetch_url, 'buttonScroll')"
+				>
+				</v-select>
 			</v-col>
 		</v-sheet>
 		<!-- <v-sheet>
@@ -133,42 +180,62 @@
 				</v-select>
 			</v-col>
 		</v-sheet>
+      <ButtonScroll />
 	</v-col>
 </template>
 
 <script>
-import Autocomplete from './Autocomplete.vue'
+// import Autocomplete from './Autocomplete.vue'
 import { mapState } from 'vuex'
+import ButtonScroll from './ButtonScroll.vue'
 
 export default {
 	name: 'ProfileComp',
 	data() {
 		return {
 			type: '',
-         view: '',
-         reset: ''
+			view: '',
+         reset: '',
+         needs_by_date: '',
+         button: ''
 		}
 	},
 	components: {
-		Autocomplete,
+      // Autocomplete,
+      ButtonScroll
 	},
 	computed: mapState({
 		template_input_style: (state) => state.info.template_input_style,
 		labelType: (state) => state.settings.labelType,
 		labelView: (state) => state.settings.labelView,
-      fetch_url: (state) => state.store.fetch_url,
-      confirmReset: state => state.settings.confirmReset
+		fetch_url: (state) => state.store.fetch_url,
+		confirmReset: (state) => state.settings.confirmReset,
+		username_value: () => localStorage.username,
+		firstName_value: () => localStorage.firstName,
+		lastName_value: () => localStorage.lastName,
 	}),
 	methods: {
-		fetch_settings_handler(newValue, fetchUrl, settingType){
-         let transformValue;
+		fetch_settings_handler(newValue, fetchUrl, settingType) {
+			let transformValue
 
-         if (settingType === 'confirmReset') {
-            if (newValue === 'Yes') transformValue = true;
-            if (newValue === 'No') transformValue = false;
+			if (settingType === 'confirmReset') {
+				if (newValue === 'Yes') newValue = true
+				if (newValue === 'No') newValue = false
+         }
+         
+         if (settingType === 'buttonScroll') {
+            if (newValue === 'Show') newValue = true
+            if (newValue === 'Hide') newValue = false
          }
 
-         this.$store.dispatch('settings/fetchSettings', [transformValue, fetchUrl, settingType]);
+			this.$store.dispatch('settings/fetchSettings', [
+				newValue,
+				fetchUrl,
+				settingType,
+			])
+      },
+      save_needs_by_date(){
+         localStorage.needsByDate = this.needs_by_date;
       }
 	},
 	mounted() {
@@ -182,12 +249,18 @@ export default {
 			? (this.view = 'Dense')
 			: this.labelView === false
 			? (this.view = 'Gap')
-         : (this.view = 'Dense');
+			: (this.view = 'Dense')
 
-      if (this.confirmReset) {
-         this.reset = 'Yes';
+		if (this.confirmReset) {
+			this.reset = 'Yes'
+		} else {
+			this.reset = 'No'
+      }
+      
+      if (localStorage.needsByDate) {
+         this.needs_by_date = localStorage.needsByDate
       } else {
-         this.reset = 'No';
+         this.needs_by_date = '';
       }
 	},
 }

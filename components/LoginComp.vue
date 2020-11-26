@@ -329,6 +329,14 @@ export default {
                
                this.$store.commit('settings/SETTINGS_MUTATION', [data.confirmReset, 'confirmReset']);
 
+               /** buttonScroll setting **/
+               if (localStorage.buttonScroll){
+                  this.$store.commit('settings/SETTINGS_MUTATION', [localStorage.buttonScroll, 'buttonScroll']);
+               } else {
+                  localStorage.buttonScroll = data.buttonScroll;
+               }
+
+
 				} else {
 					this.login_loading = false
 					if (data.msg === 'Invalid Username')

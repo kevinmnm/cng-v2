@@ -1,7 +1,8 @@
 export const state = () => ({
    labelView: true, // dense
    labelType: true, // show label
-   confirmReset: false // do not confirm 
+   confirmReset: false, // do not confirm 
+   buttonScroll: true // show scroll button
 })
 
 export const mutations = {
