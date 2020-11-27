@@ -180,14 +180,14 @@
 				</v-select>
 			</v-col>
 		</v-sheet>
-      <ButtonScroll />
+      <!-- <ButtonScroll /> -->
 	</v-col>
 </template>
 
 <script>
 // import Autocomplete from './Autocomplete.vue'
 import { mapState } from 'vuex'
-import ButtonScroll from './ButtonScroll.vue'
+// import ButtonScroll from './ButtonScroll.vue'
 
 export default {
 	name: 'ProfileComp',
@@ -202,7 +202,7 @@ export default {
 	},
 	components: {
       // Autocomplete,
-      ButtonScroll
+      // ButtonScroll
 	},
 	computed: mapState({
 		template_input_style: (state) => state.info.template_input_style,
@@ -212,7 +212,8 @@ export default {
 		confirmReset: (state) => state.settings.confirmReset,
 		username_value: () => localStorage.username,
 		firstName_value: () => localStorage.firstName,
-		lastName_value: () => localStorage.lastName,
+      lastName_value: () => localStorage.lastName,
+      buttonScroll: state => state.settings.buttonScroll
 	}),
 	methods: {
 		fetch_settings_handler(newValue, fetchUrl, settingType) {
@@ -239,6 +240,12 @@ export default {
       }
 	},
 	mounted() {
+      // this.$store.commit('LABEL_VIEW_MUTATION', localStorage['labelView']);
+      // this.$store.commit('LABEL_TYPE_MUTATION', localStorage.labelType);
+
+      // this.$store.commit('SETTINGS_MUTATION', [localStorage.confirmReset, 'confirmReset']);
+      // this.$store.commit('SETTINGS_MUTATION', [localStorage.buttonScroll, 'buttonScroll']);
+
 		this.labelType === true
 			? (this.type = 'Show')
 			: this.labelType === false
@@ -262,6 +269,13 @@ export default {
       } else {
          this.needs_by_date = '';
       }
+
+      if (this.buttonScroll === true) {
+         this.button = 'Show';
+      } else {
+         this.button = 'Hide';
+      }
+
 	},
 }
 </script>

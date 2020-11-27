@@ -37,12 +37,15 @@
 			</v-dialog>
 		</v-sheet>
 		<Profile />
+      <ButtonScroll />
 	</v-col>
 </template>
 
 <script>
 import Navbar from '@/components/NavBar.vue'
 import Profile from '@/components/Profile.vue'
+import ButtonScroll from '@/components/ButtonScroll.vue'
+// import io from 'socket.io-client'
 
 export default {
 	name: 'DashboardComp',
@@ -53,15 +56,16 @@ export default {
 	},
 	components: {
 		Navbar,
-		Profile,
+      Profile,
+      ButtonScroll
 	},
 	methods: {
 		logout() {
 			localStorage.token = null
 			this.$store.commit('logged/SET_LOGGED', false)
 			this.dialog = false
-			this.$router.push('/')
-			window.socket.disconnect()
+         this.$router.push('/')
+         window.socket.disconnect()
 		},
    },
    mounted(){
@@ -71,7 +75,7 @@ export default {
 			} else {
 				this.$vuetify.theme.dark = false
 			}
-		}
+      }
    }
 }
 </script>

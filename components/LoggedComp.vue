@@ -8,8 +8,8 @@
 					@click="set_plan_type('caremark')"
 					width="100%"
 					v-show="plan_type_button"
-               style="font-size: 18px;"
-               large
+					style="font-size: 18px"
+					large
 					>caremark</v-btn
 				>
 			</v-col>
@@ -19,8 +19,8 @@
 					@click="set_plan_type('non-caremark')"
 					width="100%"
 					v-show="plan_type_button"
-               style="font-size: 18px;"
-               large
+					style="font-size: 18px"
+					large
 					>non-caremark</v-btn
 				>
 			</v-col>
@@ -29,8 +29,8 @@
 			outlined
 			class="font-weight-bold text-center mb-6"
 			:class="[
-				{ 'prescriptionHi': plan_type === 'caremark' },
-				{ 'nonCaremark': plan_type === 'non-caremark' },
+				{ prescriptionHi: plan_type === 'caremark' },
+				{ nonCaremark: plan_type === 'non-caremark' },
 			]"
 		>
 			<h2>{{ plan_type ? plan_type.toUpperCase() : null }}</h2>
@@ -149,7 +149,7 @@
 							class="select-items"
 							:class="[
 								{ prescriptionBg: item.includes('PA initial') },
-                        { welcomeCallBg: item.includes('Copay $25 or less') },
+								{ welcomeCallBg: item.includes('Copay $25 or less') },
 								{ welcomeCallBg: item.includes('CPA attempt #1') },
 								{ welcomeCallBg: item.includes('CPA attempt #2') },
 								{ welcomeCallBg: item.includes('Patient denies CPA') },
@@ -186,14 +186,14 @@
 				"
 				:key="'prescription' + updater"
 			/>
-         <NonCaremarkTemplate
-            v-show="
-               plan_type === 'non-caremark' &&
-               templates.show_NonCaremarkTemplate &&
-               show_case_outcome
-            "
-            :key="'non-prescription' + updater"
-         />
+			<NonCaremarkTemplate
+				v-show="
+					plan_type === 'non-caremark' &&
+					templates.show_NonCaremarkTemplate &&
+					show_case_outcome
+				"
+				:key="'non-prescription' + updater"
+			/>
 			<PriorAuthTemplate
 				v-show="templates.show_PriorAuthTemplate && show_case_outcome"
 				:key="'pa' + updater"
@@ -215,9 +215,16 @@
 				:key="'triage' + updater"
 			/>
 
-         <CPAapplied v-show="templates.show_CPAapplied" :key="'already' + updater" />
+			<CPAapplied
+				v-show="templates.show_CPAapplied"
+				:key="'already' + updater"
+			/>
 		</v-sheet>
-		<v-col cols="12" class="d-flex ma-auto justify-center col-sm-6" v-if="!confirmReset">
+		<v-col
+			cols="12"
+			class="d-flex ma-auto justify-center col-sm-6"
+			v-if="!confirmReset"
+		>
 			<v-btn
 				class="pa-10"
 				width="100%"
@@ -268,7 +275,7 @@
 				</v-card>
 			</v-dialog>
 		</v-col>
-      <ButtonScroll />
+		<ButtonScroll />
 	</v-col>
 </template>
 
@@ -297,14 +304,14 @@ export default {
 		CPATemplate,
 		CopayQuoteTemplate,
 		DenialTemplate,
-      TriageTemplate,
-      CPAapplied,
-      NonCaremarkTemplate,
-      ButtonScroll
+		TriageTemplate,
+		CPAapplied,
+		NonCaremarkTemplate,
+		ButtonScroll,
 	},
 	data() {
 		return {
-         updater: 2,
+			updater: 2,
 			plan_type: false,
 			plan_type_button: true,
 			case_outcome: '',
@@ -315,13 +322,13 @@ export default {
 			quantity: '',
 			templates: {
 				show_WelcomeCallTemplate: false,
-            show_PrescriptionTemplate: false,
-            show_NonCaremarkTemplate: false,
+				show_PrescriptionTemplate: false,
+				show_NonCaremarkTemplate: false,
 				show_PriorAuthTemplate: false,
 				show_CPATemplate: false,
 				show_CopayQuoteTemplate: false,
-            show_DenialTemplate: false,
-            show_CPAapplied: false,
+				show_DenialTemplate: false,
+				show_CPAapplied: false,
 				show_TriageTemplate: false,
 			},
 			confirm_dialog: false,
@@ -364,8 +371,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					break
 
 				case 'Copay $25 or less':
@@ -373,11 +380,11 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
-               this.templates.show_CopayQuoteTemplate = true
-               this.templates.show_CPAapplied = true
+					this.templates.show_CopayQuoteTemplate = true
+					this.templates.show_CPAapplied = true
 					break
 
 				case 'CPA attempt #1':
@@ -385,8 +392,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					break
 
@@ -395,8 +402,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					this.templates.show_CPATemplate = true
 					this.templates.show_CopayQuoteTemplate = true
@@ -407,8 +414,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					this.templates.show_CPATemplate = true
 					this.templates.show_CopayQuoteTemplate = true
@@ -419,8 +426,8 @@ export default {
 						this.templates[each] = false
 					}
 					this.templates.show_WelcomeCallTemplate = true
-               this.templates.show_PrescriptionTemplate = true
-               this.templates.show_NonCaremarkTemplate = true
+					this.templates.show_PrescriptionTemplate = true
+					this.templates.show_NonCaremarkTemplate = true
 					this.templates.show_PriorAuthTemplate = true
 					this.templates.show_CopayQuoteTemplate = true
 					break
@@ -464,19 +471,19 @@ export default {
 			this.plan_type = false
 			this.plan_type_button = true
 
-         // this.$forceUpdate()
-         this.updater++;
+			// this.$forceUpdate()
+			this.updater++
 		},
 	},
 	mounted() {
 		this.$store.dispatch('logged/fetchAuth', this.fetch_url).then((res) => {
-			window.socket = io(this.fetch_url, {
-				query: 'sss',
-			})
-			console.warn(window.socket)
-			window.socket.on('customEvent', (data) => {
-				console.warn(data)
-			})
+			// window.socket = io(this.fetch_url, {
+			// 	query: 'sss',
+			// })
+			// console.warn(window.socket)
+			// window.socket.on('customEvent', (data) => {
+			// 	console.warn(data)
+			// })
 		})
 
 		if (localStorage.darkModeCng) {
@@ -486,6 +493,21 @@ export default {
 				this.$vuetify.theme.dark = false
 			}
 		}
+
+		/** labelView & labelType **/
+		this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView)
+		this.$store.commit('settings/LABEL_TYPE_MUTATION', localStorage.labelType)
+
+		/** Other Settings **/
+		this.$store.commit('settings/SETTINGS_MUTATION', [
+			localStorage.buttonScroll,
+			'buttonScroll',
+		])
+
+		this.$store.commit('settings/SETTINGS_MUTATION', [
+			localStorage.confirmReset,
+			'confirmReset',
+		])
 	},
 }
 </script>

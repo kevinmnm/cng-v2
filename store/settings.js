@@ -13,13 +13,25 @@ export const mutations = {
       }
       let settingType = payload[1];
       state[settingType] = newValue;
+      localStorage[settingType] = newValue;
    },
    LABEL_VIEW_MUTATION(state, payload){
-      (payload === 'Dense') ?  state.labelView = true : state.labelView = false;
+      // (payload === 'Dense') ?  state.labelView = true : state.labelView = false;
+      if (payload === 'Dense' || payload === true) {
+         state.labelView = true;
+      } else if (payload === 'Gap' || payload === false) {
+         state.labelView = false;
+      }
       localStorage.labelView = payload;
    },
    LABEL_TYPE_MUTATION(state, payload){
-      (payload === 'Show') ? state.labelType = true : state.labelType = false;
+      // (payload === 'Show') ? state.labelType = true : state.labelType = false;
+
+      if (payload === 'Show' || payload === true) {
+         state.labelType = true;
+      } else if (payload === 'Hide' || payload === false) {
+         state.labelType = false;
+      }
       localStorage.labelType = payload;
    }
 }
@@ -44,7 +56,11 @@ export const actions = {
       });
 
       resp.json().then( data => {
-         commit('SETTINGS_MUTATION', [data._doc.confirmReset, 'confirmReset']);
+         let settingType = data.settingType;
+         // commit('SETTINGS_MUTATION', [data._doc.confirmReset, 'confirmReset']);
+         console.warn(data);
+         commit('SETTINGS_MUTATION', [data._doc[settingType], settingType]);
+         console.warn(data);
       });
    },
    async fetchLabelType({commit}, payload) {

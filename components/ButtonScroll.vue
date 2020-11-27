@@ -1,5 +1,5 @@
 <template>
-	<v-card flat class="button-scroll-wrapper d-flex justify-space-around align-center flex-column">
+	<v-card flat class="button-scroll-wrapper d-flex justify-space-around align-center flex-column" v-show="buttonScroll">
 		<v-btn fab x-small bottom right @click="scroll_top()">
 			<v-icon small>mdi-arrow-up</v-icon>
 		</v-btn>
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'ButtonScrollComp',
    data(){
@@ -17,6 +19,9 @@ export default {
          scroll_height: null
       }
    },
+   computed:  mapState({
+		buttonScroll: state => state.settings.buttonScroll
+	}),
    methods: {
       scroll_top(){
          this.$vuetify.goTo(0);

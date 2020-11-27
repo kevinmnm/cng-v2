@@ -190,6 +190,7 @@
 
 <script>
 import io from 'socket.io-client'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'LoginComp',
@@ -261,11 +262,14 @@ export default {
 				},
 			],
 		}
-	},
+   },
+   computed: mapState({
+      fetch_url: state => state.store.fetch_url
+   }),
 	methods: {
 		saveUsername() {
 			if (this.username_check) {
-            localStorage.remember_username = true;
+				localStorage.remember_username = true
 			} else {
 				if (localStorage.remember_username) {
 					localStorage.removeItem('remember_username')
@@ -325,18 +329,27 @@ export default {
 					} else {
 						this.$store.commit('settings/LABEL_TYPE_MUTATION', 'Show')
 						localStorage.labelType = 'Show'
-               }
-               
-               this.$store.commit('settings/SETTINGS_MUTATION', [data.confirmReset, 'confirmReset']);
+					}
 
-               /** buttonScroll setting **/
-               if (localStorage.buttonScroll){
-                  this.$store.commit('settings/SETTINGS_MUTATION', [localStorage.buttonScroll, 'buttonScroll']);
-               } else {
-                  localStorage.buttonScroll = data.buttonScroll;
-               }
+					this.$store.commit('settings/SETTINGS_MUTATION', [
+						data.confirmReset,
+						'confirmReset',
+					])
 
+					window.socket = io(this.fetch_url, {
+						query: 'sss',
+					})
+					console.warn(window.socket)
+					window.socket.on('customEvent', (data) => {
+						console.warn(data)
+					})
 
+					/** buttonScroll setting **/
+					// if (localStorage.buttonScroll){
+					//    this.$store.commit('settings/SETTINGS_MUTATION', [localStorage.buttonScroll, 'buttonScroll']);
+					// } else {
+					//    localStorage.buttonScroll = data.buttonScroll;
+					// }
 				} else {
 					this.login_loading = false
 					if (data.msg === 'Invalid Username')
@@ -392,8 +405,8 @@ export default {
 		this.$vuetify.theme.dark = false
 
 		if (localStorage.remember_username === 'true') {
-         this.username_check = true;
-         this.login_username = localStorage.username;
+			this.username_check = true
+			this.login_username = localStorage.username
 		}
 	},
 }
