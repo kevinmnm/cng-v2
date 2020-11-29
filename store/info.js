@@ -23,7 +23,7 @@ export const state = () => ({
       'PHOENIX, AZ #03129',
       'HUSTON, TX #03159'
    ],
-   template_style_class: 'col-sm-10 col-md-8 col-lg-6 col-xl-6 ma-auto'
+   template_style_class: 'col-sm-10 col-md-8 col-lg-6 col-xl-5 ma-auto mt-6'
 })
 
 export const mutations = {

@@ -220,17 +220,19 @@
 				:key="'already' + updater"
 			/>
 		</v-sheet>
+
 		<v-col
 			cols="12"
 			class="d-flex ma-auto justify-center col-sm-6"
 			v-if="!confirmReset"
 		>
 			<v-btn
-				class="pa-10"
+				class="pa-10 mt-6"
 				width="100%"
 				color="primary"
-				style="font-size: 25px"
+				style="font-size: 25px; word-wrap: break-word"
 				v-show="plan_type"
+            elevation="10"
 				@click="reset_all_templates()"
 				>reset all</v-btn
 			>
@@ -240,13 +242,14 @@
 			<v-dialog v-model="confirm_dialog" persistent max-width="290">
 				<template v-slot:activator="{ on, attrs }">
 					<v-btn
-						class="pa-10"
+						class="pa-10 mt-6"
 						width="40%"
 						color="primary"
-						style="font-size: 25px"
+						style="font-size: 25px; word-wrap: break-word"
 						v-show="plan_type"
 						v-bind="attrs"
 						v-on="on"
+                  elevation="10"
 						>reset all</v-btn
 					>
 				</template>
@@ -281,7 +284,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import Navbar from './NavBar.vue'
 import WelcomeCallTemplate from './template/WelcomeCall.vue'
 import PrescriptionTemplate from './template/Prescription.vue'
@@ -351,6 +354,9 @@ export default {
 		confirmReset(state) {
 			return state.settings.confirmReset
 		},
+		// buttonScroll(state){
+		//    return state.settings.buttonScroll
+		// },
 		show_case_outcome() {
 			if (
 				this.drugName &&
@@ -495,19 +501,19 @@ export default {
 		}
 
 		/** labelView & labelType **/
-		this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView)
-		this.$store.commit('settings/LABEL_TYPE_MUTATION', localStorage.labelType)
+		// this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView)
+		// this.$store.commit('settings/LABEL_TYPE_MUTATION', localStorage.labelType)
 
 		/** Other Settings **/
-		this.$store.commit('settings/SETTINGS_MUTATION', [
-			localStorage.buttonScroll,
-			'buttonScroll',
-		])
+		// this.$store.commit('settings/SETTINGS_MUTATION', [
+		// 	localStorage.buttonScroll,
+		// 	'buttonScroll',
+		// ])
 
-		this.$store.commit('settings/SETTINGS_MUTATION', [
-			localStorage.confirmReset,
-			'confirmReset',
-		])
+		// this.$store.commit('settings/SETTINGS_MUTATION', [
+		// 	localStorage.confirmReset,
+		// 	'confirmReset',
+		// ])
 	},
 }
 </script>

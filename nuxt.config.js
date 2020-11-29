@@ -39,6 +39,7 @@ export default {
    // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
    vuetify: {
       customVariables: ['~/assets/variables.scss'],
+      treeShake: true,
       theme: {
          dark: false,
          themes: {
@@ -49,6 +50,7 @@ export default {
                nonCaremarkHi: '#ffd485',
                inputBg: '#FFFFFF',
                // inputLabel: '#063f06',
+               resultBg: '#f5f5f5',
                inputLabel: '#000000',
                welcomeCallBg: '#d5ffd5',
                welcomeCallHi: '#90ee90',
@@ -78,6 +80,7 @@ export default {
                nonCaremark: '#614615',
                nonCaremarkHi: '#614513',
                inputBg: '#404040',
+               resultBg: '#000000',
                inputLabel: '#FFFFFF',
                welcomeCallBg: '#489b48',
                welcomeCallHi: '#176217',

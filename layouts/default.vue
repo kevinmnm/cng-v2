@@ -88,7 +88,6 @@ export default {
 				window.socket = io(this.fetch_url, {
 					query: 'sss',
 				})
-				console.warn(window.socket)
 				window.socket.on('customEvent', (data) => {
 					console.warn(data)
 				})

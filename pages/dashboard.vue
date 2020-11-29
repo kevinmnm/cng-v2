@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12">
+	<v-col cols="12" class="pb-16">
 		<Navbar />
 		<v-sheet class="d-flex justify-center" style="background-color: transparent;">
 			<v-dialog v-model="dialog" persistent max-width="290">
@@ -80,5 +80,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.dashboard-page {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+}
+
 </style>

@@ -13,7 +13,8 @@ export const mutations = {
       }
       let settingType = payload[1];
       state[settingType] = newValue;
-      localStorage[settingType] = newValue;
+      // localStorage[settingType] = newValue;
+      localStorage.setItem(settingType, newValue);
    },
    LABEL_VIEW_MUTATION(state, payload){
       // (payload === 'Dense') ?  state.labelView = true : state.labelView = false;

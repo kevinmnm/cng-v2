@@ -17,7 +17,6 @@
 							label="Username"
 							prepend-icon="mdi-account-circle"
 							v-model="login_username"
-							:error="login_username_error"
 							@change="login_username_error = false"
 						></v-text-field>
 						<v-text-field
@@ -28,7 +27,6 @@
 							type="password"
 							prepend-icon="mdi-lock"
 							v-model="login_password"
-							:error="login_password_error"
 							@change="login_password_error = false"
 						></v-text-field>
 					</v-form>
@@ -87,9 +85,10 @@
 							outlined
 							label="Continuum Email"
 							type="email"
+                     validate-on-blur
+                     :rules="[ val => val.trim().length > 0, val => val.trim().includes('continuumgbl.com') ]"
 							prepend-icon="mdi-email"
-							v-model="validator_list[0].signup_email.text"
-							:error="validator_list[0].signup_email.error"
+							v-model="validator_list[0].signup_email.text"   
 						></v-text-field>
 						<v-sheet class="d-flex flex-row justify-space-between">
 							<v-col cols="6" class="pa-0 ma-0">
@@ -99,8 +98,8 @@
 									dense
 									label="First Name"
 									prepend-icon="mdi-account-question"
+                           :rules="[ val => val.trim().length > 0 ]"
 									v-model="validator_list[0].signup_first_name.text"
-									:error="validator_list[0].signup_first_name.error"
 								></v-text-field>
 							</v-col>
 							<v-col cols="6" class="pa-0 ma-0">
@@ -109,8 +108,8 @@
 									dense
 									outlined
 									label="Last Name"
+                           :rules="[ val => val.trim().length > 0 ]"
 									v-model="validator_list[0].signup_last_name.text"
-									:error="validator_list[0].signup_last_name.error"
 								></v-text-field>
 							</v-col>
 						</v-sheet>
@@ -119,9 +118,9 @@
 							dense
 							outlined
 							label="Username"
+                     :rules="[ val => val.trim().length > 0 ]"
 							prepend-icon="mdi-account-circle"
 							v-model="validator_list[0].signup_username.text"
-							:error="validator_list[0].signup_username.error"
 						></v-text-field>
 						<v-text-field
 							filled
@@ -130,8 +129,8 @@
 							type="password"
 							label="Password"
 							prepend-icon="mdi-lock"
-							v-model="validator_list[0].signup_password.text"
-							:error="validator_list[0].signup_password.error"
+                     :rules="[ val => val.replace(/\s+/g, '').length > 5 ]"
+                     v-model="validator_list[0].signup_password.text"
 						></v-text-field>
 						<v-text-field
 							filled
@@ -140,8 +139,8 @@
 							type="password"
 							label="Verify Password"
 							prepend-icon="mdi-lock-check"
-							v-model="validator_list[0].signup_password_verify.text"
-							:error="validator_list[0].signup_password_verify.error"
+                     :rules="[ val => val.replace(/\s+/g, '').length > 5 ]"
+                     v-model="validator_list[0].signup_password_verify.text"
 						></v-text-field>
 					</v-form>
 				</v-card-text>
@@ -203,7 +202,7 @@ export default {
 			login_password: '',
 			login_username_error: false,
 			login_password_error: false,
-			login_loading: false,
+         login_loading: false,
 			validator_list: [
 				{
 					signup_email: {
@@ -337,7 +336,7 @@ export default {
 					])
 
 					window.socket = io(this.fetch_url, {
-						query: 'sss',
+						query: localStorage._id,
 					})
 					console.warn(window.socket)
 					window.socket.on('customEvent', (data) => {
@@ -393,7 +392,7 @@ export default {
 			)
 
 			response.json().then((res) => {
-				console.log(res)
+				if (!res.signedUp) return alert(res.msg);
 				if (response.status === 200 && res.signedUp) {
 					alert(res.msg)
 					location.reload()

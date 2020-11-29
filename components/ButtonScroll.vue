@@ -1,5 +1,5 @@
 <template>
-	<v-card flat class="button-scroll-wrapper d-flex justify-space-around align-center flex-column" v-show="buttonScroll">
+	<v-card v-if="buttonScroll" flat class="button-scroll-wrapper d-flex justify-space-around align-center flex-column">
 		<v-btn fab x-small bottom right @click="scroll_top()">
 			<v-icon small>mdi-arrow-up</v-icon>
 		</v-btn>
@@ -19,7 +19,7 @@ export default {
          scroll_height: null
       }
    },
-   computed:  mapState({
+   computed: mapState({
 		buttonScroll: state => state.settings.buttonScroll
 	}),
    methods: {

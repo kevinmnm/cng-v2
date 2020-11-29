@@ -357,7 +357,7 @@
 				height="100px"
 				class="mb-0"
 				no-resize
-				background-color="inputBg"
+				background-color="resultBg"
 				color="inputLabel"
 				v-model="non_prescription_result"
 			></v-textarea>
@@ -434,19 +434,3 @@ export default {
    }
 }
 </script>
-
-<style scoped>
-
-.theme--light.v-label--active {
-   font-family: Arial, Helvetica, sans-serif;
-   border-radius: 3px;
-   background-color: whitesmoke;
-}
-
-.theme--dark.v-label--active {
-   font-family: Arial, Helvetica, sans-serif;
-   border-radius: 3px;
-   background-color: #000000;
-}
-
-</style>

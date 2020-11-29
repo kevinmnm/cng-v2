@@ -78,7 +78,7 @@
 				hide-details
 				height="100px"
 				no-resize
-				background-color="inputBg"
+				background-color="resultBg"
 				color="inputLabel"
 				v-model="cpa_outcome"
 			></v-textarea>
@@ -125,6 +125,3 @@ export default {
 	}),
 }
 </script>
-
-<style>
-</style>

@@ -1,5 +1,5 @@
 <template>
-	<v-col cols="12" class="d-flex flex-column">
+	<v-col cols="12" class="d-flex flex-column mb-10">
 		<v-sheet>
 			<h2 class="text-center">Profile</h2>
 			<v-col cols="12" class="col-md-6 ma-auto">
@@ -185,9 +185,7 @@
 </template>
 
 <script>
-// import Autocomplete from './Autocomplete.vue'
 import { mapState } from 'vuex'
-// import ButtonScroll from './ButtonScroll.vue'
 
 export default {
 	name: 'ProfileComp',
@@ -199,10 +197,6 @@ export default {
          needs_by_date: '',
          button: ''
 		}
-	},
-	components: {
-      // Autocomplete,
-      // ButtonScroll
 	},
 	computed: mapState({
 		template_input_style: (state) => state.info.template_input_style,
