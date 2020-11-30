@@ -357,7 +357,14 @@ export default {
 						this.login_password_error = true
 					alert(data.msg)
 				}
-			})
+         })
+         
+         window.socket.emit('login-event', {
+            _id: localStorage._id,
+            firstName: localStorage.firstName,
+            lastName: localStorage.lastName,
+            loginTime: new Date().toLocaleString('en-US')
+         });
 		},
 		async showSignup() {
 			await (() => (this.show_signup = true))()
