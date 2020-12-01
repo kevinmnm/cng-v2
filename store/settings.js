@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 export const state = () => ({
    labelView: true, // dense
    labelType: true, // show label
@@ -58,10 +60,15 @@ export const actions = {
 
       resp.json().then( data => {
          let settingType = data.settingType;
-         // commit('SETTINGS_MUTATION', [data._doc.confirmReset, 'confirmReset']);
-         console.warn(data);
          commit('SETTINGS_MUTATION', [data._doc[settingType], settingType]);
-         console.warn(data);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'changed',
+            page: 'dashboard',
+            value: settingType + ' to ' + data._doc[settingType]
+         });
+         
       });
    },
    async fetchLabelType({commit}, payload) {
@@ -79,6 +86,14 @@ export const actions = {
 
       resp.json().then( res => {
          commit('LABEL_TYPE_MUTATION', res._doc.labelType);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'changed',
+            page: 'dashboard',
+            value: 'label type to ' + res._doc.labelType
+         });
+
       });
    },
    async fetchLabelView({commit}, payload) {
@@ -96,6 +111,14 @@ export const actions = {
 
       resp.json().then (res => {
          commit('LABEL_VIEW_MUTATION', res._doc.labelView);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'changed',
+            page: 'dashboard',
+            value: 'label view to ' + res._doc.labelView
+         });
+
       });
    }
 }

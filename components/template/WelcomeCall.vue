@@ -212,6 +212,14 @@ export default {
          `.trim();
 
          this.$copyText(this.welcome_call_result);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'welcome call result: ',
+            value: this.welcome_call_result,
+            page: 'home'
+         });
+         
       }
    },
    mounted(){

@@ -30,6 +30,13 @@ export default {
    methods: {
       open_cpa(){
          window.open('https://pronet.cvshealth.com/Gen2/Shared_Web_Apps/BV_Note_Creator_Copay_Template_V3.aspx');
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'opened',
+            value: 'cpa applied template',
+            page: 'home'
+         });
       }
    }
 }

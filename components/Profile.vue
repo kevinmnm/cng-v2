@@ -227,7 +227,14 @@ export default {
 				newValue,
 				fetchUrl,
 				settingType,
-			])
+         ])
+         
+         // socket.emit('track-event', {
+         //    userId: localStorage._id,
+         //    action: 'changed',
+         //    value: settingType + ' to ' + newValue,
+         //    page: 'dashboard'
+         // });
       },
       save_needs_by_date(){
          localStorage.needsByDate = this.needs_by_date;

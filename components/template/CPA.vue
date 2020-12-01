@@ -115,6 +115,14 @@ export default {
          `.trim()
 
          this.$copyText(this.cpa_outcome);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'cpa result: ',
+            value: this.cpa_outcome,
+            page: 'home'
+         });
+
 		},
 	},
 	computed: mapState({

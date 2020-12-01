@@ -110,6 +110,13 @@ export default {
          `).trim();
 
          this.$copyText(this.copay_quote_outcome);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'copay quote result: ',
+            value: this.copay_quote_outcome,
+            page: 'home'
+         });
       }
    },
 	computed: mapState({

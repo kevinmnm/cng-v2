@@ -295,7 +295,7 @@ export default {
 				}
 			)
 
-			response.json().then((data) => {
+			await response.json().then((data) => {
 				if (data.logged) {
 					this.$store.commit('logged/SET_LOGGED', data.logged)
 					localStorage.token = 'Bearer ' + data.token
@@ -359,12 +359,12 @@ export default {
 				}
          })
          
-         window.socket.emit('login-event', {
-            _id: localStorage._id,
-            firstName: localStorage.firstName,
-            lastName: localStorage.lastName,
-            loginTime: new Date().toLocaleString('en-US')
-         });
+         // window.socket.emit('login-event', {
+         //    _id: localStorage._id,
+         //    firstName: localStorage.firstName,
+         //    lastName: localStorage.lastName,
+         //    loginTime: new Date().toLocaleString('en-US')
+         // });
 		},
 		async showSignup() {
 			await (() => (this.show_signup = true))()

@@ -419,6 +419,14 @@ export default {
          `.trim();
 
          this.$copyText(this.non_prescription_result);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'non-caremark prescription result: ',
+            value: this.non_prescription_result,
+            page: 'home'
+         });
+
       },
       paid_rejected(){
          if (this.non_covered === 'Yes') {

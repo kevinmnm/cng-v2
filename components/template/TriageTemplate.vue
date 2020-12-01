@@ -252,10 +252,19 @@ export default {
             return this.$vuetify.goTo(this.$refs.triage_form);
          }
 
-
          this.triage_outcome = (`
             Denial/Triage BV Verification Details: Verifying: asdf | Template Type: Triage | Internal Triage to: ${this.internalTriageTo()} | AT: N/A | Final Follow-up With Patient of Triage: Yes | At phone#: ${this.triage_at_phone} | Spoke to: ${this.triage_spoke_to} | Conversation/VM Detailed: ${this.conversation_voicemail_details} | Final Disposition sent to: ${this.finalDispositionSentTo()}
          `).trim();
+
+         this.$copyText(this.triage_outcome);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'triage result: ',
+            value: this.triage_outcome,
+            page: 'home'
+         });
+
       },
       internalTriageTo(){
          if (this.which_triage === 'Internal') {

@@ -104,6 +104,14 @@ export default {
          `).trim();
 
          this.$copyText(this.pa_result);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'pa result: ',
+            value: this.pa_result,
+            page: 'home'
+         });
+
       }
    },
    computed: mapState({

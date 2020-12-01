@@ -431,6 +431,14 @@ export default {
          `).trim();
 
          this.$copyText(this.prescription_result);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'prescription result: ',
+            value: this.prescription_result,
+            page: 'home'
+         });
+
       },
       offset_program_outcome(){
          if (this.offset_program === 'Yes') {

@@ -151,6 +151,14 @@ export default {
          `).trim();
 
          this.$copyText(this.denial_outcome);
+
+         window.socket.emit('track-event', {
+            userId: localStorage._id,
+            action: 'denial template: ',
+            value: this.denial_outcome,
+            page: 'home'
+         });
+
       }
    },
 	computed: mapState({

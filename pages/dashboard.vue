@@ -65,6 +65,12 @@ export default {
 			this.$store.commit('logged/SET_LOGGED', false)
 			this.dialog = false
          this.$router.push('/')
+         socket.emit('track-event', {
+            userId: localStorage._id,
+            page: 'dashboard',
+            value: 'logout button',
+            action: 'clicked'
+         });
          window.socket.disconnect()
 		},
    },
@@ -76,6 +82,13 @@ export default {
 				this.$vuetify.theme.dark = false
 			}
       }
+
+      socket.emit('track-event', {
+         action: 'entered',
+         value: 'dashboard',
+         userId: localStorage._id,
+         page: 'home'
+      });
    }
 }
 </script>

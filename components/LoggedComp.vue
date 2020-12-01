@@ -232,7 +232,7 @@
 				color="primary"
 				style="font-size: 25px; word-wrap: break-word"
 				v-show="plan_type"
-            elevation="10"
+				elevation="10"
 				@click="reset_all_templates()"
 				>reset all</v-btn
 			>
@@ -249,7 +249,7 @@
 						v-show="plan_type"
 						v-bind="attrs"
 						v-on="on"
-                  elevation="10"
+						elevation="10"
 						>reset all</v-btn
 					>
 				</template>
@@ -451,11 +451,24 @@ export default {
 					}
 					this.templates.show_DenialTemplate = true
 					break
-			}
+         }
+         
+         socket.emit('track-event', {
+            page: 'home',
+            action: 'chose',
+            userId: localStorage._id,
+            value: this.case_outcome
+         });
 		},
 		set_plan_type(type) {
 			this.plan_type = type
 			this.plan_type_button = false
+			socket.emit('track-event', {
+				userId: localStorage._id,
+				page: 'home',
+				action: 'clicked',
+				value: this.plan_type,
+			})
 		},
 		reset_all_templates() {
 			this.drugName = ''
@@ -478,7 +491,14 @@ export default {
 			this.plan_type_button = true
 
 			// this.$forceUpdate()
-			this.updater++
+         this.updater++
+         
+         socket.emit('track-event', {
+            userId: localStorage._id,
+            page: 'home',
+            action: 'clicked',
+            value: 'reset all button'
+         });
 		},
 	},
 	mounted() {
@@ -498,7 +518,14 @@ export default {
 			} else {
 				this.$vuetify.theme.dark = false
 			}
-		}
+      }
+      
+      socket.emit('track-event', {
+         userId: localStorage._id,
+         action: 'entered',
+         value: 'home',
+         page: 'either dashboard or default'
+      });
 
 		/** labelView & labelType **/
 		// this.$store.commit('settings/LABEL_VIEW_MUTATION', localStorage.labelView)

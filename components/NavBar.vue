@@ -1,12 +1,21 @@
 <template>
 	<v-app-bar app dense>
-		<v-toolbar-title class="font-weight-bold" style="height: 100%;">
+		<v-toolbar-title class="font-weight-bold" style="height: 100%">
 			<v-tooltip bottom>
 				<template v-slot:activator="{ on, attrs }">
-					<v-btn large to="/" v-bind="attrs" v-on="on" :ripple="false" tile text height="100%">
-                  <h2 class="hidden-md-and-down">cng</h2>
-                  <v-icon class="hidden-lg-and-up">mdi-home</v-icon>
-               </v-btn>
+					<v-btn
+						large
+						to="/"
+						v-bind="attrs"
+						v-on="on"
+						:ripple="false"
+						tile
+						text
+						height="100%"
+					>
+						<h2 class="hidden-md-and-down">cng</h2>
+						<v-icon class="hidden-lg-and-up">mdi-home</v-icon>
+					</v-btn>
 				</template>
 				<span>HOME</span>
 			</v-tooltip>
@@ -64,16 +73,35 @@ export default {
 	computed: mapState({
 		labelView: (state) => state.settings.labelView,
 		labelType: (state) => state.settings.labelType,
+		fetch_url: (state) => state.store.fetch_url,
 	}),
 	methods: {
 		triggerDarkMode() {
 			this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-			localStorage.darkModeCng = this.$vuetify.theme.dark
+         localStorage.darkModeCng = this.$vuetify.theme.dark
+
+			fetch(this.fetch_url + '/settings', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: localStorage.token,
+				},
+				method: 'POST',
+				body: JSON.stringify({
+					_id: localStorage._id,
+					settingType: 'darkModeCng',
+					newValue: localStorage.darkModeCng,
+				}),
+			})
+
+			window.socket.emit('track-event', {
+				userId: localStorage._id,
+				action: 'changed theme to',
+				page: 'navbar',
+				value: (() => {
+					return localStorage.darkModeCng === 'true' ? 'dark' : 'light'
+				})(),
+			})
 		},
 	},
 }
 </script>
-
-<style scoped>
-
-</style>
