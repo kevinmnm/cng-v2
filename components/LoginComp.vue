@@ -336,19 +336,10 @@ export default {
 					])
 
 					window.socket = io(this.fetch_url, {
-						query: localStorage._id,
+						query: {
+                     userId: localStorage._id
+                  }
 					})
-					console.warn(window.socket)
-					window.socket.on('customEvent', (data) => {
-						console.warn(data)
-					})
-
-					/** buttonScroll setting **/
-					// if (localStorage.buttonScroll){
-					//    this.$store.commit('settings/SETTINGS_MUTATION', [localStorage.buttonScroll, 'buttonScroll']);
-					// } else {
-					//    localStorage.buttonScroll = data.buttonScroll;
-					// }
 				} else {
 					this.login_loading = false
 					if (data.msg === 'Invalid Username')
@@ -358,13 +349,6 @@ export default {
 					alert(data.msg)
 				}
          })
-         
-         // window.socket.emit('login-event', {
-         //    _id: localStorage._id,
-         //    firstName: localStorage.firstName,
-         //    lastName: localStorage.lastName,
-         //    loginTime: new Date().toLocaleString('en-US')
-         // });
 		},
 		async showSignup() {
 			await (() => (this.show_signup = true))()
@@ -375,7 +359,6 @@ export default {
 			this.validator_values_array = Object.values(this.validator_list[0])
 
 			for (let i = 0; i < this.validator_values_array.length; i++) {
-				// console.dir( this.validator_list[0][this.validator_keys_array[i]].error );
 				if (!this.validator_list[0][this.validator_keys_array[i]].text) {
 					this.validator_list[0][this.validator_keys_array[i]].error = true
 				}

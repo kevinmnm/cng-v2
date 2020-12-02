@@ -84,14 +84,18 @@ export default {
 						data.userInfo.buttonScroll,
 						'buttonScroll',
 					])
-				})
+            })
+            
 				window.socket = io(this.fetch_url, {
-					query: 'sss',
-				})
-				window.socket.on('customEvent', (data) => {
-					console.warn(data)
-				})
-				this.show_content = true
+					query: {
+                  userId: localStorage._id
+               }
+            })
+
+            console.warn(window.socket);
+            
+            this.show_content = true
+            
 			} else {
 				console.warn('User not logged in..')
 				this.show_content = true
