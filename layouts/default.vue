@@ -47,7 +47,7 @@ export default {
 		if (process.env.NODE_ENV === 'development') {
 			this.$store.commit('store/FETCH_URL_MUTATION', 'http://localhost:5555')
 		} else if (process.env.NODE_ENV === 'production') {
-			this.$store.commit('store/FETCH_URL_MUTATION', 'needs to be declared')
+			this.$store.commit('store/FETCH_URL_MUTATION', 'https://bvcngserver.herokuapp.com')
 		} else return console.error('UNABLE TO DETERMINE NODE_ENV')
 	},
 	mounted() {
