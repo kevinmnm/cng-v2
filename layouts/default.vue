@@ -10,7 +10,8 @@
 				></v-progress-circular>
 			</v-container>
 			<v-container v-else>
-				<nuxt />
+            <nuxt />
+				<!-- <nuxt keep-alive :keep-alive-props="{ include: ['LoggedComp'] }" /> -->
 			</v-container>
 		</v-main>
 	</v-app>
@@ -29,7 +30,19 @@ export default {
 	},
 	computed: mapState({
 	   fetch_url: state => state.store.fetch_url
-	}),
+   }),
+   methods: {
+      forceHttps(){
+         if (location.protocol !== 'https:') {
+         location.replace(`
+            https:${location.href.substring(location.protocol.length)}
+      `);
+}
+      }
+   },
+   beforeCreate(){
+      process.env.NODE_ENV === 'production' && this.forceHttps();
+   },
 	created() {
 		if (process.env.NODE_ENV === 'development') {
 			this.$store.commit('store/FETCH_URL_MUTATION', 'http://localhost:5555')
@@ -48,7 +61,7 @@ export default {
 			})
 				.then((res) => res.json())
 				.then((data) => {
-					console.warn(data)
+					// console.warn(data)
 					this.$store.commit('logged/SET_LOGGED', data.logged)
 					// this.show_content = true;
 				})
@@ -92,12 +105,12 @@ export default {
                }
             })
 
-            console.warn(window.socket);
+            // console.warn(window.socket);
             
             this.show_content = true
             
 			} else {
-				console.warn('User not logged in..')
+				// console.warn('User not logged in..')
 				this.show_content = true
 			}
 		})()

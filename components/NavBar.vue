@@ -23,7 +23,7 @@
 
 		<v-spacer></v-spacer>
 
-		<v-tooltip bottom>
+		<v-tooltip v-if="new_update" bottom>
 			<template v-slot:activator="{ on, attrs }">
 				<v-badge
 					dot
@@ -35,6 +35,15 @@
 						<v-icon>mdi-bell</v-icon>
 					</v-btn>
 				</v-badge>
+			</template>
+			<span>UPDATES</span>
+		</v-tooltip>
+
+      <v-tooltip v-if="!new_update" bottom>
+			<template v-slot:activator="{ on, attrs }">
+            <v-btn large v-bind="attrs" v-on="on" text>
+               <v-icon>mdi-bell</v-icon>
+            </v-btn>
 			</template>
 			<span>UPDATES</span>
 		</v-tooltip>
@@ -62,6 +71,9 @@
 			</template>
 			<span>DASHBOARD</span>
 		</v-tooltip>
+      <!-- <v-dialog v-model="udpate_dialog" presistent class="ma-auto" tile width="50%">
+         <h1>asldkfjsdf</h1>
+      </v-dialog> -->
 	</v-app-bar>
 </template>
 
@@ -69,7 +81,13 @@
 import { mapState } from 'vuex'
 
 export default {
-	name: 'NavBarComp',
+   name: 'NavBarComp',
+   data(){
+      return{
+         new_update: false,
+         update_dialog: true
+      }
+   },
 	computed: mapState({
 		labelView: (state) => state.settings.labelView,
 		labelType: (state) => state.settings.labelType,

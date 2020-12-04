@@ -107,7 +107,13 @@ export default {
 			)
 		},
 		cpa_result() {
-			if (!this.was_cpa_offered) return (this.cpa_error = true)
+         if (!this.was_cpa_offered) {
+            this.cpa_error = true;
+            this.$vuetify.goTo(this.$refs.cpa_form)
+            return
+         }
+
+			// if (!this.was_cpa_offered) return (this.cpa_error = true)
 			// else if (this.was_cpa_offered && !this.how_many_attempts) return (this.cpa_error = false this.how_many_attempts_error = true );
 			else this.cpa_error = false
 			this.cpa_outcome = `

@@ -17,7 +17,7 @@ export const actions = {
       let data = await respond.json();
 
       return new Promise((res, rej) => {
-         console.warn('From logged.js action logged value: ' + data.logged);
+         // console.warn('From logged.js action logged value: ' + data.logged);
          commit('SET_LOGGED', data.logged);
          res();
       });

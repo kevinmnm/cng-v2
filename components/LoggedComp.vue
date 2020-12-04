@@ -57,7 +57,7 @@
 						v-model="drugName"
 						:rules="[(val) => val.trim().length > 0]"
 						validate-on-blur
-						@change="$store.commit('info/SET_DRUGNAME', drugName)"
+						@blur="$store.commit('info/SET_DRUGNAME', drugName)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -71,7 +71,7 @@
 						v-model="strength"
 						:rules="[(val) => val.trim().length > 0]"
 						validate-on-blur
-						@change="$store.commit('info/SET_STRENGTH', strength)"
+						@blur="$store.commit('info/SET_STRENGTH', strength)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -85,7 +85,7 @@
 						v-model="quantity"
 						:rules="[(val) => val.trim().length > 0]"
 						validate-on-blur
-						@change="$store.commit('info/SET_QUANTITY', quantity)"
+						@blur="$store.commit('info/SET_QUANTITY', quantity)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -99,7 +99,7 @@
 						v-model="dos"
 						:rules="[(val) => val.trim().length > 0]"
 						validate-on-blur
-						@change="$store.commit('info/SET_DOS', dos)"
+						@blur="$store.commit('info/SET_DOS', dos)"
 					></v-text-field>
 				</v-card>
 				<v-card flat>
@@ -113,7 +113,7 @@
 						v-model="ndc"
 						:rules="[(val) => val.trim().length > 0]"
 						validate-on-blur
-						@change="$store.commit('info/SET_NDC', ndc)"
+						@blur="$store.commit('info/SET_NDC', ndc)"
 					></v-text-field>
 				</v-card>
 			</v-card>
@@ -524,7 +524,7 @@ export default {
          userId: localStorage._id,
          action: 'entered',
          value: 'home',
-         page: 'either dashboard or default'
+         page: 'either dashboard or by default'
       });
 
 		/** labelView & labelType **/

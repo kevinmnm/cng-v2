@@ -421,9 +421,17 @@ export default {
 	methods: {
 		prescription_temp_result() {
          this.$refs.prescription_form.validate();
-         if ( Object.keys(this.$refs.prescription_form.errorBag).includes(true) ) {
-            return this.$vuetify.goTo(this.$refs.prescription_form);
-         }
+         // if ( Object.keys(this.$refs.prescription_form.errorBag).includes(true) ) {
+         //    return this.$vuetify.goTo(this.$refs.prescription_form);
+         // }
+
+         if (
+				Object.values(this.$refs.prescription_form.errorBag)
+					.slice(0, -1)
+					.includes(true)
+			) {
+				return this.$vuetify.goTo(this.$refs.prescription_form)
+			}
 
 
          this.prescription_result = (`

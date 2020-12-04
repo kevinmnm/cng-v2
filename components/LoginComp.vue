@@ -3,8 +3,8 @@
 		<v-sheet class="mb-3">
 			<h1 class="login-title ma-auto">CNG</h1>
 		</v-sheet>
-		<v-col cols="12" class="col-lg-6 ma-auto mb-5">
-			<v-card class="ma-auto pa-1" style="border: 2px solid lightGrey">
+		<v-col cols="12" class="col-lg-6 ma-auto mb-5 d-flex flex-column">
+			<v-card class="ma-auto pa-1" width="100%" style="border: 2px solid lightGrey">
 				<v-card-title>
 					<h3>LOGIN</h3>
 				</v-card-title>
@@ -55,6 +55,7 @@
 			class="ma-auto"
 			color="accent"
 			width="200px"
+         outlined
 			@click="showSignup()"
 			>new?</v-btn
 		>
@@ -151,21 +152,22 @@
 				</v-card-actions>
 			</v-card>
 		</v-col>
-		<v-dialog v-model="dialog" presistent>
-			<v-btn
+		<v-dialog v-model="dialog" presistent class="ma-auto" tile width="50%">
+			<v-card>
+				<v-card-title class="headline">Signup Guide</v-card-title>
+            <v-btn
 				fab
 				icon
-				absolute
 				small
 				right
+            absolute
+            top
 				color="primary"
-				class="ma-3"
+				class="mt-7"
 				@click="dialog = false"
 			>
 				<v-icon dense>mdi-close-thick</v-icon>
 			</v-btn>
-			<v-card tile>
-				<v-card-title class="headline">Signup Guide</v-card-title>
 				<v-list class="pa-0 ma-0" dense>
 					<v-list-item
 						v-for="all in signup_guide"
