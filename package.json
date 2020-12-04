@@ -10,6 +10,9 @@
       "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
       "lint": "npm run lint:js"
    },
+   "engines": {
+      "node": "14.3.0"
+   },
    "dependencies": {
       "core-js": "^3.6.5",
       "nuxt": "^2.14.6",
