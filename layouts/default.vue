@@ -40,14 +40,15 @@ export default {
 }
       }
    },
-   beforeCreate(){
-      process.env.NODE_ENV === 'production' && this.forceHttps();
-   },
+   // beforeCreate(){
+   //    process.env.NODE_ENV === 'production' && this.forceHttps();
+   // },
 	created() {
 		if (process.env.NODE_ENV === 'development') {
 			this.$store.commit('store/FETCH_URL_MUTATION', 'http://localhost:5555')
 		} else if (process.env.NODE_ENV === 'production') {
-			this.$store.commit('store/FETCH_URL_MUTATION', 'https://bvcngserver.herokuapp.com')
+         this.$store.commit('store/FETCH_URL_MUTATION', 'https://bvcngserver.herokuapp.com');
+         this.forceHttps();
 		} else return console.error('UNABLE TO DETERMINE NODE_ENV')
 	},
 	mounted() {
