@@ -279,6 +279,7 @@
 			</v-dialog>
 		</v-col>
 		<ButtonScroll />
+      <LeftBottom />
 	</v-col>
 </template>
 
@@ -296,6 +297,7 @@ import TriageTemplate from './template/TriageTemplate.vue'
 import CPAapplied from './template/CPAapplied.vue'
 import NonCaremarkTemplate from './template/NonCaremark.vue'
 import ButtonScroll from './ButtonScroll.vue'
+import LeftBottom from './LeftBottom.vue'
 
 export default {
 	name: 'LoggedComp',
@@ -310,7 +312,8 @@ export default {
 		TriageTemplate,
 		CPAapplied,
 		NonCaremarkTemplate,
-		ButtonScroll,
+      ButtonScroll,
+      LeftBottom
 	},
 	data() {
 		return {
