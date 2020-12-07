@@ -1,5 +1,5 @@
 <template>
-	<v-card class="left-bottom-wrapper d-flex flex-row" flat >
+	<v-card class="left-bottom-wrapper d-flex flex-row" flat>
 		<v-dialog
 			persistent
 			v-model="quick_welcome_dialog"
@@ -8,7 +8,18 @@
 		>
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn icon v-bind="attrs" v-on="on" rounded text>
-					<v-icon large color="welcomeCallHi">mdi-alpha-w-circle</v-icon>
+					<v-tooltip top>
+						<template v-slot:activator="{ on, attrs }">
+							<v-icon
+								v-bind="attrs"
+								v-on="on"
+								large
+								color="welcomeCallHi"
+								>mdi-alpha-w-circle</v-icon
+							>
+						</template>
+                  <span>Welcome Call</span>
+					</v-tooltip>
 				</v-btn>
 			</template>
 			<v-card outlined>
@@ -20,7 +31,7 @@
 				>
 					<v-icon>mdi-close-thick</v-icon>
 				</v-btn>
-            <br><br>
+				<br /><br />
 				<v-card flat>
 					<v-text-field
 						label="Drug Name"
@@ -41,7 +52,7 @@
 				<WelcomeCall />
 			</v-card>
 
-         <!-- <v-col
+			<!-- <v-col
 			cols="12"
 			class="d-flex ma-auto justify-center col-sm-6"
 			v-if="!confirmReset"
@@ -56,7 +67,6 @@
 				>reset all</v-btn
 			>
 		</v-col> -->
-
 		</v-dialog>
 
 		<!-- <v-btn icon>
@@ -82,14 +92,14 @@ export default {
 			quick_drugname: '',
 			quick_welcome_dialog: false,
 		}
-   },
-   methods: {
-      quick_welcome_dialog_close(){
-         this.quick_drugname = '';
-         this.$store.commit('info/SET_DRUGNAME', this.quick_drugname);
-         this.quick_welcome_dialog = false;
-      }
-   }
+	},
+	methods: {
+		quick_welcome_dialog_close() {
+			this.quick_drugname = ''
+			this.$store.commit('info/SET_DRUGNAME', this.quick_drugname)
+			this.quick_welcome_dialog = false
+		},
+	},
 }
 </script>
 
@@ -104,5 +114,6 @@ export default {
 	box-sizing: border-box;
 	left: 0;
 	bottom: 0;
+   margin-left: 10px;
 }
 </style>
