@@ -279,7 +279,11 @@
 			</v-dialog>
 		</v-col>
 		<ButtonScroll />
-      <LeftBottom />
+      <v-card class="left-bottom-wrapper d-flex flex-row" flat>
+      <SAwelcome />
+      <SAtriage />
+      <SAdenial />
+      </v-card>
 	</v-col>
 </template>
 
@@ -297,7 +301,9 @@ import TriageTemplate from './template/TriageTemplate.vue'
 import CPAapplied from './template/CPAapplied.vue'
 import NonCaremarkTemplate from './template/NonCaremark.vue'
 import ButtonScroll from './ButtonScroll.vue'
-import LeftBottom from './LeftBottom.vue'
+import SAwelcome from './SAwelcome.vue'
+import SAtriage from './SAtriage.vue'
+import SAdenial from './SAdenial.vue'
 
 export default {
 	name: 'LoggedComp',
@@ -313,7 +319,9 @@ export default {
 		CPAapplied,
 		NonCaremarkTemplate,
       ButtonScroll,
-      LeftBottom
+      SAwelcome,
+      SAtriage,
+      SAdenial
 	},
 	data() {
 		return {
@@ -549,6 +557,16 @@ export default {
 </script>
 
 <style scoped>
+
+.left-bottom-wrapper {
+   box-sizing: border-box;
+   position: fixed;
+	left: 0;
+   bottom: 5px;
+   width: auto;
+   margin-left: 10px;
+}
+
 .select-items {
 	position: absolute;
 	display: flex;

@@ -1,5 +1,5 @@
 <template>
-	<v-card class="left-bottom-wrapper d-flex flex-row" flat>
+	<v-sheet>
 		<v-dialog
 			persistent
 			v-model="quick_welcome_dialog"
@@ -15,10 +15,11 @@
 								v-on="on"
 								large
 								color="welcomeCallHi"
+                        style="border-radius:50%;"
 								>mdi-alpha-w-circle</v-icon
 							>
 						</template>
-                  <span>Welcome Call</span>
+						<span>Welcome Call</span>
 					</v-tooltip>
 				</v-btn>
 			</template>
@@ -51,39 +52,15 @@
 				</v-card>
 				<WelcomeCall />
 			</v-card>
-
-			<!-- <v-col
-			cols="12"
-			class="d-flex ma-auto justify-center col-sm-6"
-			v-if="!confirmReset"
-		>
-			<v-btn
-				class="pa-10 mt-6"
-				width="100%"
-				color="primary"
-				style="font-size: 25px; word-wrap: break-word"
-				elevation="10"
-				@click="reset_all_templates()"
-				>reset all</v-btn
-			>
-		</v-col> -->
 		</v-dialog>
-
-		<!-- <v-btn icon>
-			<v-icon color="triageHi">mdi-alpha-t-circle</v-icon>
-		</v-btn>
-
-		<v-btn icon>
-			<v-icon color="denialHi">mdi-alpha-d-circle</v-icon>
-		</v-btn> -->
-	</v-card>
+	</v-sheet>
 </template>
 
 <script>
 import WelcomeCall from '@/components/template/WelcomeCall.vue'
 
 export default {
-	name: 'LeftBottomComp',
+	name: 'standaloneWelcomeCall',
 	components: {
 		WelcomeCall,
 	},
@@ -102,18 +79,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-/* .close-btn {
-	display: block;
-	position: absolute;
-   right: 0;
-} */
-.left-bottom-wrapper {
-	position: fixed;
-	box-sizing: border-box;
-	left: 0;
-	bottom: 0;
-   margin-left: 10px;
-}
-</style>
