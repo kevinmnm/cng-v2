@@ -57,9 +57,9 @@ export default {
 		} else return console.error('UNABLE TO DETERMINE NODE_ENV')
 
 		// DOES NOT COLLIDE WITH LOGIN FUNCTION!
-		this.show_content = false
+		this.show_content = false;
 
-		;(async () => {
+	   (async () => {
 			// alert('logging in again');
 			await fetch(this.$store.state.store.fetch_url + '/auth', {
 				headers: { Authorization: localStorage.token },
